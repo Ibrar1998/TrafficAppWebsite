@@ -1,0 +1,59 @@
+
+
+   .full-change{
+    background-color: #00acee;
+    box-shadow: 0 10px 20px 0px rgba(0, 0, 0, 0.3);
+    
+}
+
+.showBorder{
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    transform:scale(1);
+}
+
+
+
+.Menue-icon-style{
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    margin-left: 2em;
+    transition: all .2s linear;
+}
+
+.Menue-icon-style:hover{
+    color:black ;
+    border-bottom: 1px solid white;
+}
+
+
+.Menue-icon-style-icon{
+    color: black !important;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    margin-left: .5em;
+    transition: all .2s linear;
+    z-index: 1;
+}
+
+
+.Menue-icon-style-icon:hover{
+    color:black ;
+    border-bottom: 1px solid white;
+    cursor: pointer;
+    transform:scale(1);
+    
+}
+
+.some-change{
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    transition: all .5s linear;
+}
+
+.some-change:hover{
+    color:black ;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    transform:scale(1);
+}

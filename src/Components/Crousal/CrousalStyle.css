@@ -1,0 +1,46 @@
+ 
+h1{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 6em;
+}
+
+p{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+}
+
+ .btn-extra-style{
+     color: white !important;
+        margin-bottom: 3em;
+}
+
+
+
+@media all and (max-width : 570px) {
+
+    h1{
+            font-size: 20px;
+    }
+    p{
+            font-size: 15px;
+    }
+    
+    
+    .btn-extra-style{
+    color: white !important;
+    margin-bottom: 0em;
+    
+}
+}
+
+
+@media all and (max-width : 400px) {
+
+    h1{
+            font-size: 20px;
+    }
+    p{
+        font-size: 10px;
+    }
+    
+}
