@@ -16,6 +16,7 @@ import SignUpPage from './Components/Register/SignUpPage';
 import Profile from './Components/ProfileDashboard/Profile';
 import ApplyForLearner from './Components/ProfileDashboard/ApplyForLearner';
 import ApplyForLicense from './Components/ProfileDashboard/ApplyForLicense';
+import PayChallan from './Components/ProfileDashboard/PayChallan';
 
 
 const App = () => {
@@ -46,6 +47,7 @@ const App = () => {
                   <Route path='/Profile'    component ={Profile}/>
                   <Route path ='/ApplyForLearner' component={ApplyForLearner}/>
                   <Route path ='/ApplyForLicense' component={ApplyForLicense}/>
+                  <Route path ='/PayChallan' component={PayChallan}/>
                 </Switch>
     </Router>
       </>

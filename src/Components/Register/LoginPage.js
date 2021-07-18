@@ -10,8 +10,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import API_URL from '../../config'
-
+import API_URL from '../../config';
+import { Base64 } from 'js-base64';
+import Loader from "react-loader-spinner";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,9 +34,9 @@ export default function SignIn() {
   const classes = useStyles();
   const [Email, setEmail] = useState('');
   const [password, setpassword] = useState('');
+  const [spinnerLoading, setSpinnerLoading] = useState(false);
 
-
-
+  
         const SubmitLogin = (event) =>
         {
         event.preventDefault();
@@ -49,15 +50,17 @@ export default function SignIn() {
           }
 
        //   console.log(CNIC , password);
-
+       setSpinnerLoading(true)
           axios.post(API_URL+'/login/',{
             Email:Email,
-            Password:password
+            Password: Base64.encode(password)
           })
           .then(res =>{
-            
+           
+              console.log(res)
             if(res.data[0].Role){
               localStorage.setItem('UserData',JSON.stringify(res.data[0]));
+              setSpinnerLoading(false);
               window.location='/Profile'
             }
           }
@@ -92,16 +95,22 @@ export default function SignIn() {
 
    
     <Container component="main" maxWidth="xs" style={{paddingBottom:'10em'}}>
+     
+    
+  
+      
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
+       
         <Typography component="h1" variant="h5">
           Login
         </Typography>
         <form noValidate>
-
+       
+     
         
 
           <TextField
@@ -134,6 +143,14 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           /> */}
+                  <Loader
+            style={{textAlign:'center'}}
+              type="Puff" 
+              color="green"
+              height={80}
+              width={60}
+              visible={spinnerLoading}
+            />
           <Button
             type="submit"
             fullWidth
@@ -156,6 +173,7 @@ export default function SignIn() {
               </Link>
             </Grid>
           </Grid>
+        
         </form>
       </div>
       

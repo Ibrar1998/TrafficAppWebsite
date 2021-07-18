@@ -14,7 +14,7 @@ const MenueBar = () =>  {
                 <div className="row">
                                 <div className="col-md-2 d-flex justify-content-start ">
                                       <Link to='/'>
-                                       <img src="./images/ITP.png" className="my-1" alt="khan" width="60px" height="60px"></img>
+                                       <img src="./images/ITP.png" className="my-1" alt="ITP" width="60px" height="60px"></img>
                                        </Link>
                                         
                                 </div>
@@ -117,7 +117,7 @@ const MenueBar = () =>  {
                                                 
                                                 <Nav.Link >
                                                               <Link to='/Login' >
-                                                                 <button className="btn btn-primary" style={{width:'150px' }}> LOGIN </button>
+                                                                 <button className="btn btn-primary" style={{width:'100px' , height: '35px' }}> LOGIN </button>
                                                               </Link>
                                                 </Nav.Link>
                                             

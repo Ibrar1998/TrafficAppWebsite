@@ -15,9 +15,8 @@
 
 
 .Menue-icon-style{
-    font-size: 20px;
+    font-size: 15px;
     font-family: 'Courier New', Courier, monospace;
-    margin-left: 2em;
     transition: all .2s linear;
 }
 
@@ -29,7 +28,7 @@
 
 .Menue-icon-style-icon{
     color: black !important;
-    font-size: 20px;
+    font-size: 15px;
     font-family: 'Courier New', Courier, monospace;
     margin-left: .5em;
     transition: all .2s linear;
@@ -46,7 +45,7 @@
 }
 
 .some-change{
-    font-size: 20px;
+    font-size: 15px;
     font-family: 'Courier New', Courier, monospace;
     transition: all .5s linear;
 }

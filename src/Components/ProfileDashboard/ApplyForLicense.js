@@ -1,28 +1,69 @@
-import React from 'react';
-import { Layout , Breadcrumb , Dropdown , Card , Modal ,Form, Input  , Row , Col } from 'antd';
+import React,{useState} from 'react';
+import { Layout , Breadcrumb  , Card , Modal ,Form, Input  , Row , Col , Radio , Checkbox     } from 'antd';
 import 'antd/dist/antd.css';
-import { Typography } from 'antd';
-import { Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import IconImg from '../../assets/icon.png';
-import { Menu } from 'antd';
-import {Link} from 'react-router-dom';
-import { Tabs } from 'antd';
-import { Button } from '@material-ui/core';
+import { Tabs ,Button} from 'antd';
+// import { Button } from '@material-ui/core';
 import Sidebarss from './Sidebarss';
-
-
+import Quiz from './Quiz';
+import Countdown from 'react-countdown';
+import Manubar from './Manubar';
+import API_URL from '../../config';
+import axios from 'axios';
+import {
+    
+    CCard,
+    CCardBody,
+    CCol,
+    CRow, 
+    CBadge,
+    CButton,
+   
+  } from '@coreui/react'
 const { TabPane } = Tabs;
-
-// const { SubMenu } = Menu;
-
-const { Title } = Typography;
-const { Header , Footer, Content } = Layout;
+const {  Footer, Content } = Layout;
 
 
 const ApplyForLicense = () => {
+    const [CNIC,setCNIC] =  useState('');//
+    const [Name,setName] =  useState('');//
+    const [FName,setFname] =  useState('');//
+    const [BloodGropup, setBloodGropup] = useState('');//
+    const [Adress, setAdress] = useState('');//
+    const [Dob, setDOB] = useState('');//
+    const [PhoneNum, setPhoneNum] = useState('');//
+    const [UserID, setUserID] = useState('');
+    const [Occupation, setOccupation] = useState('');
+    const [LicenseType, setLicenseType] = useState('');
+    const [LicenseApplied, setLicenseApplied] = useState({});
+    ///////////////////////////////
 
     const [isModalVisible, setIsModalVisible] = React.useState(false);
+    const [showTest, setshowTest] = React.useState(false);
+
+
+
+    React.useEffect(() => {
+        const userdata=JSON.parse(localStorage.getItem('UserData'));
+        setUserID(userdata._id)
+
+        axios.get(API_URL+'/license/'+UserID)
+        .then(res=>
+            {
+                setLicenseApplied(res.data)
+                console.log(res)
+            })
+           
+        .catch(err=>console.log(err))
+        
+      
+  }, [UserID]);
+  const getBadge = status => {
+    switch (status) {
+      case 'Completed': return 'success'
+      case 'Pending': return 'danger'
+      default: return 'primary'
+    }
+  }
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -30,8 +71,75 @@ const ApplyForLicense = () => {
 
     const handleOk = (event) => {
         event.preventDefault();
+        if(!Name){
+            alert('Please Enter Name');
+            return;
+        }
+        if(!FName){
+            alert('Please Enter father');
+            return;
+        }
+        if(!Adress){
+            alert('Please Enter Addres');
+            return;
+        }
+        if(!Dob){
+            alert('Please Enter Date of Birth');
+            return;
+        }
+        if(!CNIC){
+            alert('Please Enter Cnic');
+            return;
+        }
+        if(!Occupation){
+            alert('Please Enter Occupation');
+            return;
+        }
+        if(!BloodGropup){
+            alert('Please Enter Bloodgroup');
+            return;
+        }
+        if(!PhoneNum){
+            alert('Please Enter Mobile number');
+            return;
+        }if(!LicenseType){
+            alert('Please Enter Check License Type');
+            return;
+        }
 
-        
+            var userdata={
+                UserId:LicenseApplied.UserId,
+                Status:'Pending',
+                Cnic:CNIC,
+                LicenseInfo:{
+                    Name:Name,
+                    FName:FName,
+                    Adress:Adress,
+                    Cnic:CNIC,
+                    Dob:Dob,
+                    Occupation:Occupation,
+                    BloodGropup:BloodGropup,
+                    PhoneNum:PhoneNum,
+                    LicenseType:LicenseType,
+                    LicenseImage:LicenseApplied.LearnerImage,
+                    Nationality:LicenseApplied.Nationality,
+                    DriverType:LicenseApplied.DriverType,
+                    LeanerID:LicenseApplied._id,
+                }
+            }
+
+            axios({
+                method: "post",
+                url: "http://192.168.0.111:7777/license/createlicense",
+                data: userdata,
+              })
+                .then(function (response) {
+                  console.log(response);
+                })
+                .catch(function (response) {
+                  console.log(response);
+                });
+        setIsModalVisible(false);
       };
     
       const handleCancel = () => {
@@ -41,53 +149,30 @@ const ApplyForLicense = () => {
       function callback(key) {
         console.log(key);
       }
-      
-   
-
-      const retunrToLoginPage = () =>{
-          window.location = './Login'
-      }
     // // Styling of the from components 
       const layout = {
         
         wrapperCol: { span: 12 },
       };
 
-  
 
-            const menu = (
-                <Menu style={{width: 350 , textAlign : 'center'}}>
-                <Menu.Item>
-                   <Link>
-                  Profile
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                <Link>
-                   Settings
-                   </Link>
-                </Menu.Item>
-               
-                <Menu.Item>
-                    <Link onClick={retunrToLoginPage}>
-                        <strong>Logout</strong>
-                    </Link>
-                </Menu.Item>
-                </Menu>
-            );
+            const Completionist = () => <span>Time UP!</span>;
+
+            // Renderer callback with condition
+            const renderer = ({  minutes, seconds, completed }) => {
+                if (completed) {
+                  // Render a completed state
+                  return <Completionist />;
+                } else {
+                  // Render a countdown
+                  return <span><strong>{minutes}:{seconds}</strong></span>;
+                }
+              };
                 
     return (
         <>
-            <Layout style={{height:'1060px'}}>
-                <Header style ={{ paddingTop :10  }}>
-
-                <Dropdown overlay={menu} placement="bottomRight" arrow>
-                        <Avatar style={{float:'right' , cursor : 'pointer' }} src={IconImg} size="large" icon={<UserOutlined />} />
-                </Dropdown>
-                        
-
-                <Title level={3} style ={{ color: 'white'}}> <img src='./images/ITP.png' width='30px' alt="logo pic"></img> Islamabad Traffic Police</Title>
-                </Header>
+            <Layout style={{height:'1000px'}}>
+                <Manubar/>
             <Layout> 
                                         <Sidebarss />
             <Layout>
@@ -131,7 +216,7 @@ const ApplyForLicense = () => {
                                                         Apply For License
                                                     </Button>
 
-                                                    <Modal width={1500} title="Application for New License" visible={isModalVisible} cancelButtonProps={false}  onOk={handleOk} onCancel={handleCancel} >
+                                                    <Modal width={1000} title="Application for New License" visible={isModalVisible}   onOk={handleOk} onCancel={handleCancel} >
 
                                                            
                                                             <div>
@@ -141,133 +226,139 @@ const ApplyForLicense = () => {
                                                             <Form
                                                             {... layout}
                                                             >
-                                                              
-
-                                                               
-
+                 
                                                                 <Row>
 
 
-                                                                                    <Col span={12}><strong>Driving License Applictaion</strong> 
+                                                                                    <Col span={24}><strong>APPLICANT'S DATA</strong> 
                                                                                             <br></br><br></br>
-
-
-                                                                                        <Form.Item
-                                                                                        label="CNIC"
-                                                                                        name="CNIC"
-                                                                                        rules={[{ required: true, message: 'Please input your CNIC!' }]}
+                                                                                            
+                                                                                        <Row >
+                                                                                            <Col sm={24} className='text-center'>
+                                                                                            <Form.Item >
+                                                                                                <Radio.Group
+                                                                                                 onChange={(e) => setLicenseType(e.target.value)}
+                                                                                                 value={LicenseType}
+                                                                                                >
+                                                                                                <Radio value="New License">New License</Radio>
+                                                                                                <Radio value="Duplicate">Duplicate</Radio>
+                                                                                                <Radio value="Renewal">Renewal</Radio>
+                                                                                                
+                                                                                                </Radio.Group>
+                                                                                            </Form.Item>
+                                                                                            </Col>
+                                                                                        </Row>        
                                                                                         
-                                                                                        >
-                                                                                        <Input style={{marginLeft : '9.8em'}} 
-                                                                                        
-                                                                                        />
-                                                                                        </Form.Item>
-
                                                                                         <Form.Item
-                                                                                        label="Name "
-                                                                                        name="Name "
+                                                                                        label="Name"
+                                                                                        name="Name"
                                                                                         rules={[{ required: true, message: 'Please input your Name!' }]}
                                                                                         
                                                                                         >
-                                                                                        <Input style={{marginLeft : '9.4em'}}
-                                                                                         
-                                                                                        />
+                                                                                            <Input
+                                                                                            value={Name}
+                                                                                            onChange={(e)=>setName(e.target.value)}
+                                                                                            style={{marginLeft : '12em'}} />
                                                                                         </Form.Item>
 
                                                                                         <Form.Item
-                                                                                        label="Father/Husband Name"
-                                                                                        name="Father/Husband Name"
-                                                                                        rules={[{ required: true, message: 'Please input your Father/Husband!' }]}
-                                                                                       
-                                                                                        >
-                                                                                        <Input style={{marginLeft : '2em'}} 
-                                                                                         
-                                                                                        />
-                                                                                        </Form.Item>
-
-                                                                                       
-
-                                                                                        
-
-                                                                                        <Form.Item
-                                                                                        label="Nationality"
-                                                                                        name="Nationality"
-                                                                                        rules={[{ required: true, message: 'Please input your Nationality!' }]}
+                                                                                        label="Father Name "
+                                                                                        name="Father Name "
+                                                                                        rules={[{ required: true, message: 'Please input your Father Name!' }]}
                                                                                         
                                                                                         >
-                                                                                        <Input style={{marginLeft : '7.2em'}}
-                                                                                    
-
-                                                                                        />
-                                                                                        </Form.Item>
-
-                                                                                        <Form.Item
-                                                                                        label="Present Street "
-                                                                                        name="Present Street "
-                                                                                        rules={[{ required: true, message: 'Please input your Present Street !' }]}
-                                                                                       
-                                                                                        >
-                                                                                        <Input style={{marginLeft : '5.8em'}} 
+                                                                                        <Input 
+                                                                                         value={FName}
+                                                                                         onChange={(e)=>setFname(e.target.value)}
+                                                                                        type='text' style={{marginLeft : '9em'}}
                                                                                          
                                                                                         />
                                                                                         </Form.Item>
 
                                                                                         <Form.Item
-                                                                                        label="Permanent Street"
-                                                                                        name="Permanent Street "
-                                                                                        rules={[{ required: true, message: 'Please input your Permanent Street!' }]}
+                                                                                        label="Pernament Address"
+                                                                                        name=" Address"
+                                                                                        rules={[{ required: true, message: 'Please input your Permanent Address' }]}
+                                                                                        >
+                                                                                        <Input
+                                                                                        value={Adress}
+                                                                                        onChange={(e)=>setAdress(e.target.value)}
+                                                                                        type='text' style={{marginLeft : '6em'}} 
+                                                                                         
+                                                                                        />
+                                                                                        </Form.Item>
                                                                                         
-                                                                                        >
-                                                                                        <Input style={{marginLeft : '4.3em'}} 
-                                                                                         
-                                                                                        />
-                                                                                        </Form.Item>
-                                                                                        </Col>
-
-
-                                                                                        <Col span={12}><strong>Passport Number</strong>
-                                                                                        <br></br><br></br>
-
                                                                                         <Form.Item
-                                                                                        label="Passport Number"
-                                                                                        name="Passport Number "
-                                                                                        rules={[{ required: false, message: 'Please input your Permanent Street!' }]}
-                                                                                        >
-                                                                                        <Input style={{marginLeft : '4.3em'}} />
-                                                                                        </Form.Item>
-
-                                                                                        <Form.Item
-                                                                                        label="DOB"
+                                                                                        label="DOB "
                                                                                         name="DOB "
-                                                                                        rules={[{ required: true, message: 'Please input your DOB!' }]}
+                                                                                        rules={[{ required: true, message: 'Please input your Present DOB!' }]}
                                                                                        
                                                                                         >
-                                                                                        <Input type='date' style={{marginLeft : '9em'}} 
-                                                                                        
+                                                                                        <Input
+                                                                                        value={Dob}
+                                                                                        onChange={(e)=>setDOB(e.target.value)}
+                                                                                        type='date' style={{marginLeft : '12.5em'}} 
+                                                                                         
                                                                                         />
                                                                                         </Form.Item>
 
-                                                                                        
-
-                                                                                        
-
                                                                                         <Form.Item
-                                                                                        label="Phone"
-                                                                                        name="Phone "
-                                                                                        rules={[{ required: true, message: 'Please input your Phone!' }]}
+                                                                                        label="CNIC NO"
+                                                                                        name="CNIC NO "
+                                                                                        rules={[{ required: true, message: 'Please input your CNIC NO!' }]}
                                                                                         
                                                                                         >
-                                                                                        <Input style={{marginLeft : '8.3em'}} 
+                                                                                        <Input
+                                                                                            value={CNIC}
+                                                                                            onChange={(e)=>setCNIC(e.target.value)}
+                                                                                        type='text' style={{marginLeft : '10.3em'}} 
+                                                                                         
+                                                                                        />
+                                                                                        </Form.Item>
+                                                                                        
+                                                    
+
+                                                                                        <Form.Item
+                                                                                        label="Occupation"
+                                                                                        name="Occupation "
+                                                                                        rules={[{ required: true, message: 'Please input your Occupation!' }]}
+                                                                                       
+                                                                                        >
+                                                                                        <Input
+                                                                                          value={Occupation}
+                                                                                          onChange={(e)=>setOccupation(e.target.value)}
+                                                                                        type='text' style={{marginLeft : '9em'}} 
+                                                                                        
+                                                                                        />
+                                                                                        </Form.Item>
+                                                                                       <Form.Item
+                                                                                        label="Blood Group"
+                                                                                        name="Blood Group "
+                                                                                        rules={[{ required: true, message: 'Please input your Blood Group!' }]}
+                                                                                        
+                                                                                        >
+                                                                                        <Input 
+                                                                                          value={BloodGropup}
+                                                                                          onChange={(e)=>setBloodGropup(e.target.value)}
+                                                                                        type='text' style={{marginLeft : '8.3em'}} 
                                                                                      
                                                                                         />
                                                                                         </Form.Item>
                                                                                         
                                                                                         <Form.Item
-                                                                                        label="Height"
-                                                                                        name="Height "
+                                                                                        label="Tel"
+                                                                                        name="Tel "
                                                                                         >
-                                                                                        <Input style={{marginLeft : '8.9em'}} />
+                                                                                        <Input 
+                                                                                             value={PhoneNum}
+                                                                                             onChange={(e)=>setPhoneNum(e.target.value)}
+                                                                                        type='text' style={{marginLeft : '13.3em'}} />
                                                                                         </Form.Item>
+
+                                                 
+                                                                                                <Checkbox style={{marginLeft: '15em'}}>I declare that all the information provided above is correct to the best of my knowledge.
+                                                                                                    
+                                                                                                </Checkbox>
                                                                                         
                                                                                         </Col>
                                                                            
@@ -287,7 +378,130 @@ const ApplyForLicense = () => {
 
                                     </TabPane>
                                     <TabPane tab="Applied" key="2">
-                                            Applied
+                                    {
+                                            LicenseApplied?
+                                            <>
+                                            <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                                            <thead className="thead-light">
+                                                <tr>
+                                                {/* <th className="text-center"></th> */}
+                                                <th>Username</th>
+                                                <th>DOB</th>
+                                                <th>Date Applied</th>
+                                                <th>Id</th>
+                                                <th>Status</th>
+                                                
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <td>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Name:null}</td>
+                                                <td>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Dob:null}</td>
+                                                <td>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseAppleidDate:null}</td>
+                                              <td>{LicenseApplied._id}</td>
+                                              <td><CBadge color={getBadge(LicenseApplied.Status)}>
+                                                    {LicenseApplied.Status}
+                                                </CBadge></td>
+                                              
+                                            </tbody>            
+                                            </table>
+                                                      </>
+
+                                            :
+                                            <h1 style={{textAlign:'center'}}>No Record Found!</h1>
+                                        }
+                                    </TabPane>
+                                    <TabPane tab="Quiz" key="3">
+                                        {
+                                            LicenseApplied.Status==='Approved'?
+                                            <>
+                                            {
+                                                   showTest?
+                                                   <Card title="License Test" bordered={false} style={{ width: 800 ,height:600 }}>
+                                                   <h2>
+                                                   <Countdown
+                                                   date={Date.now() + 600000}
+                                                   renderer={renderer}
+                                                    />
+                                                   </h2>
+                                                  <Quiz  Id={LicenseApplied._id} />
+                                                  </Card>
+                                                   :
+                                                   <>
+                                                  <Button type="primary" style={{width:300,marginLeft:400,marginTop:100 }} 
+                                                  onClick={()=>setshowTest(true)}
+                                                  >Start Test</Button>
+                                                   </>
+                                            }
+                                           
+                                            </>
+                                            :<h2>Your License Application Still Pending so you can't give License Test</h2>
+
+
+                                          
+                                        }
+                                       
+                            
+                                    </TabPane>
+                                    <TabPane tab="Challan Form" key="4">
+                                    <CCard style={{width:1100}}>
+                                        {
+                                        LicenseApplied.LicenseTest==='Passed'?
+                                        <CCardBody>
+                                        <CRow>
+                                            <CCol sm={1}></CCol>
+                                            <CCol sm={3}>
+                                                {
+                                                    LicenseApplied.LicenseInfo?
+                                                    <img
+                                                    src={API_URL+'/'+LicenseApplied.LicenseInfo.LicenseImage}
+                                                     alt="adminlogo"
+                                                     style={{width:200}}
+                                                     shape="rounded"
+                                                 />
+                                                    :null
+
+                                                }
+                                           
+                                            </CCol>
+                                            <CCol sm={8}>
+                                            <h5>Applicant Name:<span style={{fontSize:14,color:'gray'}}> {LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Name:null}</span></h5>
+                                            <h5>Father Name:<span style={{fontSize:14,color:'gray'}}> {LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.FName:null}</span></h5>
+                                            <h5>Pernament Addres:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Adress:null}</span> </h5>
+                                            <h5>Date of Birth:<span style={{fontSize:14,color:'gray'}}> {LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Dob:null}</span></h5>
+                                            <h5>Occupation: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Occupation:null}</span></h5>
+                                            <h5>Blood Group: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.BloodGropup:null}</span></h5>
+                                            <h5>Mobile Number:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.PhoneNum:null}</span> </h5>
+                                            <h5>License Type:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.LicenseType:null}</span> </h5>
+                                            <h5>Nationality:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Nationality:null}</span> </h5>
+                                            <h5>Driver Type: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.DriverType:null}</span></h5>
+                                            <h5>Applicant ID: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied._id}</span></h5>
+                                            <h5>License Applied Date:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseAppleidDate}</span> </h5>
+                                            </CCol>
+                                        </CRow>
+                    
+                                        <CRow>
+                                            <CCol> 
+                                            </CCol>
+                                            <CCol>
+                                            <CButton color="success" onClick={()=>alert('downloaded')}>Download pdf</CButton>
+                                            </CCol>
+                                    
+                                        </CRow>
+                                
+                                    
+                                    
+                                    </CCardBody>     
+                                        :
+                                        <h2>You have't Passed your License test Yet so you can't  continue to Medical and Driving Test</h2>
+
+
+                                        
+                    
+                                        }
+                                       
+                                    </CCard>
+                                 
+                               
                                     </TabPane>
                                     
                                 </Tabs>

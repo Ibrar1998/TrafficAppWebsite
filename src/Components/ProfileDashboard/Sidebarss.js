@@ -37,7 +37,7 @@ const {  Sider } = Layout;
                 title="Online Learner "
                 >
 
-                    <Menu.ItemGroup key="Learner" title="Learner">
+                    <Menu.ItemGroup key="Learner" >
                         <Menu.Item key="Apply For Learner">
                                 <Link to='/ApplyForLearner'>Apply For Learner</Link> 
                         </Menu.Item>
@@ -52,9 +52,23 @@ const {  Sider } = Layout;
                 title="Online License "
                 >
 
-                    <Menu.ItemGroup key="License" title="License">
+                    <Menu.ItemGroup key="License" >
                         <Menu.Item key="Apply For License">
                                 <Link to='/ApplyForLicense'>Apply For License</Link> 
+                        </Menu.Item>
+                        
+                    </Menu.ItemGroup>
+                </SubMenu>
+
+                <SubMenu 
+                key="sub3" 
+                // icon={<MailOutlined />} 
+                title="Pay Challan "
+                >
+
+                    <Menu.ItemGroup key="Pay Challan" >
+                        <Menu.Item key="Pay Challan">
+                                <Link to='/PayChallan'>Pay Challan</Link> 
                         </Menu.Item>
                         
                     </Menu.ItemGroup>

@@ -1,25 +1,18 @@
 import React, { useState } from 'react';
-import { Layout , Breadcrumb , Dropdown , Card , Modal ,Form, Input  , Row , Col , Select , Radio} from 'antd';
+import { Layout , Breadcrumb  , Card , Modal ,Form, Input  , Row , Col , Select , Radio} from 'antd';
 import 'antd/dist/antd.css';
-import { Typography } from 'antd';
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import IconImg from '../../assets/icon.png';
-import { Menu } from 'antd';
-import {Link} from 'react-router-dom';
 import { Tabs } from 'antd';
 import { Button } from '@material-ui/core';
 import Sidebarss from './Sidebarss';
 import axios from 'axios';
+import Manubar from './Manubar';
 
-
+import API_URL from '../../config';
 
 const { TabPane } = Tabs;
-
-// const { SubMenu } = Menu;
-
-const { Title } = Typography;
-const { Header , Footer, Content } = Layout;
+const {  Footer, Content } = Layout;
 
 
 const ApplyForLearner = () => {
@@ -54,7 +47,7 @@ const ApplyForLearner = () => {
         const userdata=JSON.parse(localStorage.getItem('UserData'));
         setUserID(userdata._id)
 
-        axios.get('http://192.168.0.109:7777/user/'+UserID)
+        axios.get(API_URL+'/user/'+UserID)
         .then(res=>
             {
                 setLearnerApplied(res.data)
@@ -175,53 +168,20 @@ const ApplyForLearner = () => {
         console.log(key);
       }
       
-
-      const retunrToLoginPage = () =>{
-          window.location = './Login'
-      }
     // Styling of the from components 
       const layout = {
         
         wrapperCol: { span: 12 },
       };
 
-    //   const tailLayout = {
-    //     wrapperCol: {  span: 30 },
-    //   };
+  
 
-            const menu = (
-                <Menu style={{width: 150 , textAlign : 'center'}}>
-                <Menu.Item>
-                   <Link>
-                  Profile
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                <Link>
-                   Settings
-                   </Link>
-                </Menu.Item>
-               
-                <Menu.Item>
-                    <Link onClick={retunrToLoginPage}>
-                        <strong>Logout</strong>
-                    </Link>
-                </Menu.Item>
-                </Menu>
-            );
+           
                 
     return (
         <>
-            <Layout style={{height:'1060px'}}>
-                <Header style ={{ paddingTop :10  }}>
-
-                <Dropdown overlay={menu} placement="bottomRight" arrow>
-                        <Avatar style={{float:'right' , cursor : 'pointer' }} src={IconImg} size="large" icon={<UserOutlined />} />
-                </Dropdown>
-                        
-
-                <Title level={3} style ={{ color: 'white'}}> <img src='./images/ITP.png' width='30px' alt="logo pic"></img> Islamabad Traffic Police</Title>
-                </Header>
+            <Layout style={{height:'900px'}}>
+              <Manubar/>
             <Layout> 
                                         <Sidebarss />
             <Layout>

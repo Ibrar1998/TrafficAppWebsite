@@ -16,7 +16,7 @@ import SocialAccounts from '../SocialAccounts/SocialAcc';
 import Navbar from '../MenueBar/MenueBar'
 import axios from 'axios';
 import API_URL from '../../config';
-
+import Loader from "react-loader-spinner";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,7 +46,7 @@ export default function SignUp() {
   const [Cnic, setCnic] = useState();
   const [Password, setPassword] = useState('');
   const [ConfirmPassword, setConfirmPassword] = useState('');
-
+  const [spinnerLoading, setSpinnerLoading] = useState(false);
 
   const SubmitSignuP =(event)=>{
     event.preventDefault();
@@ -84,14 +84,15 @@ export default function SignUp() {
         }
 
         console.log(Datatosend);
-
+        setSpinnerLoading(true)
         axios.post(API_URL+'/register',Datatosend)
         .then(res=>{
           if(res.status===200){
+            setSpinnerLoading(false);
             window.location='/Login'
           }
         })
-        .catch(err=>console.log(err))
+        .catch(err=>console.log(err));
     
 
   }
@@ -216,6 +217,14 @@ export default function SignUp() {
 
 
           </Grid>
+                  <Loader
+              style={{textAlign:'center'}}
+                type="Puff" 
+                color="green"
+                height={80}
+                width={60}
+                visible={spinnerLoading}
+              />
           <Button
             type="submit"
             fullWidth
