@@ -2,28 +2,22 @@ import React,{useState} from 'react';
 import { Layout , Breadcrumb  , Card , Modal ,Form, Input  , Row , Col , Radio , Checkbox     } from 'antd';
 import 'antd/dist/antd.css';
 import { Tabs ,Button} from 'antd';
-// import { Button } from '@material-ui/core';
 import Sidebarss from './Sidebarss';
 import Quiz from './Quiz';
 import Countdown from 'react-countdown';
 import Manubar from './Manubar';
 import API_URL from '../../config';
 import axios from 'axios';
-import {
-    
-    CCard,
-    CCardBody,
-    CCol,
-    CRow, 
-    CBadge,
-    CButton,
-   
-  } from '@coreui/react'
+import ProfileCard from './ProfileCard';
+import {CBadge,  CButton,} from '@coreui/react'
+import PrintComponents from "react-print-components";
+
 const { TabPane } = Tabs;
 const {  Footer, Content } = Layout;
 
 
 const ApplyForLicense = () => {
+
     const [CNIC,setCNIC] =  useState('');//
     const [Name,setName] =  useState('');//
     const [FName,setFname] =  useState('');//
@@ -36,9 +30,10 @@ const ApplyForLicense = () => {
     const [LicenseType, setLicenseType] = useState('');
     const [LicenseApplied, setLicenseApplied] = useState({});
     ///////////////////////////////
-
+  
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [showTest, setshowTest] = React.useState(false);
+
 
 
 
@@ -443,65 +438,20 @@ const ApplyForLicense = () => {
                             
                                     </TabPane>
                                     <TabPane tab="Challan Form" key="4">
-                                    <CCard style={{width:1100}}>
+                                   
+                                    
+                                         <ProfileCard LicenseApplied={LicenseApplied}  />
                                         {
-                                        LicenseApplied.LicenseTest==='Passed'?
-                                        <CCardBody>
-                                        <CRow>
-                                            <CCol sm={1}></CCol>
-                                            <CCol sm={3}>
-                                                {
-                                                    LicenseApplied.LicenseInfo?
-                                                    <img
-                                                    src={API_URL+'/'+LicenseApplied.LicenseInfo.LicenseImage}
-                                                     alt="adminlogo"
-                                                     style={{width:200}}
-                                                     shape="rounded"
-                                                 />
-                                                    :null
-
-                                                }
-                                           
-                                            </CCol>
-                                            <CCol sm={8}>
-                                            <h5>Applicant Name:<span style={{fontSize:14,color:'gray'}}> {LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Name:null}</span></h5>
-                                            <h5>Father Name:<span style={{fontSize:14,color:'gray'}}> {LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.FName:null}</span></h5>
-                                            <h5>Pernament Addres:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Adress:null}</span> </h5>
-                                            <h5>Date of Birth:<span style={{fontSize:14,color:'gray'}}> {LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Dob:null}</span></h5>
-                                            <h5>Occupation: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Occupation:null}</span></h5>
-                                            <h5>Blood Group: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.BloodGropup:null}</span></h5>
-                                            <h5>Mobile Number:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.PhoneNum:null}</span> </h5>
-                                            <h5>License Type:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.LicenseType:null}</span> </h5>
-                                            <h5>Nationality:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Nationality:null}</span> </h5>
-                                            <h5>Driver Type: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.DriverType:null}</span></h5>
-                                            <h5>Applicant ID: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied._id}</span></h5>
-                                            <h5>License Applied Date:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseAppleidDate}</span> </h5>
-                                            </CCol>
-                                        </CRow>
-                    
-                                        <CRow>
-                                            <CCol> 
-                                            </CCol>
-                                            <CCol>
-                                            <CButton color="success" onClick={()=>alert('downloaded')}>Download pdf</CButton>
-                                            </CCol>
-                                    
-                                        </CRow>
-                                
-                                    
-                                    
-                                    </CCardBody>     
-                                        :
-                                        <h2>You have't Passed your License test Yet so you can't  continue to Medical and Driving Test</h2>
-
-
-                                        
-                    
+                                            LicenseApplied._id?
+                                            <PrintComponents
+                                            trigger={<CButton   color="success" >Download pdf</CButton>}
+                                            >
+                                          <ProfileCard LicenseApplied={LicenseApplied}  />
+                                            </PrintComponents>
+                                            :null
                                         }
+                                           
                                        
-                                    </CCard>
-                                 
-                               
                                     </TabPane>
                                     
                                 </Tabs>
