@@ -38,7 +38,7 @@ const ApplyForLicense = () => {
            return;
        }
        setSpinnerLoading(true)
-           axios.post(API_URL+'/wardan/challanList',{
+           axios.post(API_URL+'/wardan/webchallanlist',{
                OffenderCnic:Cnic,
                RegNoOfVehicle:Vehicle
            })
