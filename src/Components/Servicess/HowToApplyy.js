@@ -1,7 +1,6 @@
 import React from 'react';
 import {Accordion , Card ,Button } from 'react-bootstrap';
 import Footers from '../Footers/Footers';
-import SocialAccounts from '../SocialAccounts/SocialAcc';
 import Navbar from '../MenueBar/MenueBar';
 
 const HowToApply = () => {
@@ -121,7 +120,7 @@ const HowToApply = () => {
             </div>
 
             <Footers/>
-            <SocialAccounts />  
+        
 
         </>
     )

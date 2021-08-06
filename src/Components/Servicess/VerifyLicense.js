@@ -1,6 +1,5 @@
 import React,{useState} from 'react';
 import Footers from '../Footers/Footers';
-import SocialAccounts from '../SocialAccounts/SocialAcc';
 import Navbar from '../MenueBar/MenueBar';
 import {   Form , Input  , Button } from 'antd';
 import Loader from "react-loader-spinner";
@@ -149,7 +148,7 @@ const [ShowSearch, setShowSearch] = useState(true);
         </div>
 
             <Footers/>
-            <SocialAccounts />   
+          
 
     </>
   );

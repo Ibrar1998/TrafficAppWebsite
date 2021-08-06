@@ -16,7 +16,7 @@ const {   Footer, Content  } = Layout;
 
 
 const ApplyForLicense = () => {
-        const [Cnic, setCnic] = useState('');
+        
         const [Vehicle, setVehicle] = useState('');  
         const [Data, setData] = useState([]);
         const [spinnerLoading, setSpinnerLoading] = useState(false);
@@ -29,22 +29,23 @@ const ApplyForLicense = () => {
      
         console.log(paymentId, PayerID,_id);
         const onFinish = (values) => {
-          if(!Cnic){
-              alert('Please Enter Cnic');
-              return;
-          }
+          
           if(!Vehicle){
            alert('Please Enter Cnic');
            return;
        }
        setSpinnerLoading(true)
            axios.post(API_URL+'/wardan/webchallanlist',{
-               OffenderCnic:Cnic,
                RegNoOfVehicle:Vehicle
            })
            .then(res=>{
              setSpinnerLoading(false)
-               console.log(res);
+             console.log(res);
+             if(res.data.message){
+               alert(res.data.message);
+               return;
+             }
+              
                setData(res.data);
            })
            .catch(err=>console.log(err));
@@ -222,17 +223,7 @@ const ApplyForLicense = () => {
                                                 onFinish={onFinish}
                                                 onFinishFailed={onFinishFailed}
                                                 >
-                                                <Form.Item
-                                                    label="CNIC"
-                                                    name="CNIC"
-                                                    
-                                                    rules={[{ required: false, message: 'Please input your CNIC!' }]}
-                                                >
-                                                    <Input
-                                                    onChange={(e)=>setCnic(e.target.value)}
-                                                    value={Cnic}
-                                                    type='value'  placeholder='xxxxx-xxxxxxx-x' />
-                                                </Form.Item>
+                                            
                                                 <Form.Item
                                                 label="Vehicle Number"
                                                 name="Vehicle Number"

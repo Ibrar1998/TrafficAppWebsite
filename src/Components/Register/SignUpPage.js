@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Footers from '../Footers/Footers';
-import SocialAccounts from '../SocialAccounts/SocialAcc';
 import Navbar from '../MenueBar/MenueBar'
 import axios from 'axios';
 import API_URL from '../../config';
@@ -250,7 +249,7 @@ export default function SignUp() {
     </Container>
 
             <Footers/>
-            <SocialAccounts />
+       
     
             </>     
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import Img1 from '../../../assets/Traffic-Violation.png';
 import Footers from '../../Footers/Footers';
-import SocialAccounts from '../../SocialAccounts/SocialAcc';
 import Navbar from '../../MenueBar/MenueBar';
 export default function TrafficViolations() {
     return (
@@ -33,7 +32,7 @@ export default function TrafficViolations() {
                   
 
                     <Footers/>
-                    <SocialAccounts />
+                 
         </>
     )
 }

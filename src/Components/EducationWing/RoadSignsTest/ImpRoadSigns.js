@@ -1,6 +1,5 @@
 import React from 'react';
 import Footers from './/../../Footers/Footers';
-import SocialAccounts from '../../SocialAccounts/SocialAcc';
 import Img1 from '../../../assets/1.jpg';
 import Img2 from '../../../assets/2.jpg';
 import Img3 from '../../../assets/3.jpg';
@@ -58,7 +57,7 @@ export default function ImpRoadSigns() {
                   
 
                     <Footers/>
-                    <SocialAccounts />
+                  
         </>
     )
 }

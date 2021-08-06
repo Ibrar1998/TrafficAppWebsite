@@ -1,5 +1,4 @@
 import React from 'react';
-import SocialAccounts from '../SocialAccounts/SocialAcc';
 import Footers from '../Footers/Footers';
 import Navbar from '../MenueBar/MenueBar';
 
@@ -103,7 +102,7 @@ export default function AboutITP() {
 
 
       <Footers />
-      <SocialAccounts />
+     
     </>
   );
 }

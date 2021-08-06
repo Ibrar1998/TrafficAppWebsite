@@ -1,5 +1,4 @@
 import React from 'react';
-import SocialAccounts from '../SocialAccounts/SocialAcc';
 import Footers from '../Footers/Footers';
 import Navbar from '../MenueBar/MenueBar';
 
@@ -9,7 +8,7 @@ import Navbar from '../MenueBar/MenueBar';
     <>
       <Navbar />
       <Footers />
-      <SocialAccounts />
+  
     </>
   );
 }

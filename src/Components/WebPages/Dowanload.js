@@ -1,5 +1,4 @@
 import React from 'react';
-import SocialAccounts from '../SocialAccounts/SocialAcc';
 import Footers from '../Footers/Footers';
 
 export default function Dowanload() {
@@ -7,7 +6,7 @@ export default function Dowanload() {
     <>
     <h1>Dowanload sections</h1>
       <Footers />
-      <SocialAccounts />
+     
     </>
   );
 }

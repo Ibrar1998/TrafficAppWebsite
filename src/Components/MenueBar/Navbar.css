@@ -1,13 +1,13 @@
 
 
    .full-change{
-    background-color: #00acee;
+    background-color: darkgray;
     box-shadow: 0 10px 20px 0px rgba(0, 0, 0, 0.3);
     
 }
 
 .showBorder{
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid red;
     cursor: pointer;
     transform:scale(1);
 }
@@ -21,13 +21,13 @@
 }
 
 .Menue-icon-style:hover{
-    color:black ;
+    color:#2a98db;
     border-bottom: 1px solid white;
 }
 
 
 .Menue-icon-style-icon{
-    color: black !important;
+    color: #2a98db !important;
     font-size: 15px;
     font-family: 'Courier New', Courier, monospace;
     margin-left: .5em;
@@ -37,7 +37,7 @@
 
 
 .Menue-icon-style-icon:hover{
-    color:black ;
+    color:#2a98db ;
     border-bottom: 1px solid white;
     cursor: pointer;
     transform:scale(1);
@@ -51,8 +51,8 @@
 }
 
 .some-change:hover{
-    color:black ;
-    border-bottom: 1px solid black;
+    color:#2a98db ;
+    border-bottom: 1px solid #2a98db;
     cursor: pointer;
     transform:scale(1);
 }

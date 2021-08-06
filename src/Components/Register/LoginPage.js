@@ -13,7 +13,7 @@ import Container from '@material-ui/core/Container';
 import API_URL from '../../config';
 import { Base64 } from 'js-base64';
 import Loader from "react-loader-spinner";
-
+import { CAlert} from '@coreui/react'
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(20),
@@ -35,11 +35,13 @@ export default function SignIn() {
   const [Email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [spinnerLoading, setSpinnerLoading] = useState(false);
+  const [Alert, setAlert] = React.useState(false);
 
   
         const SubmitLogin = (event) =>
         {
         event.preventDefault();
+        setAlert(false);
           if (!Email) {
             alert('Please fill Email');
             return;
@@ -58,6 +60,10 @@ export default function SignIn() {
           .then(res =>{
            
               console.log(res)
+              if(res.data.message){
+                setSpinnerLoading(false);
+                setAlert(true);
+              }
             if(res.data[0].Role){
               localStorage.setItem('UserData',JSON.stringify(res.data[0]));
               setSpinnerLoading(false);
@@ -73,13 +79,7 @@ export default function SignIn() {
           )
           .catch(err=>console.log(err));
 
-          // if(CNIC===Login.CNIC && password===Login.password){
-         
-          //   } 
-
-          // else {
-          //   setAlert(true); 
-          //   }
+        
 
 
           
@@ -151,6 +151,16 @@ export default function SignIn() {
               width={60}
               visible={spinnerLoading}
             />
+             {
+          Alert ? 
+       
+                  <CAlert
+            color="danger"
+          >
+            <strong style={{alignItems:'center'}}>Invalid Username and Password!!</strong>
+          </CAlert>
+          :null
+        }
           <Button
             type="submit"
             fullWidth

@@ -2,7 +2,6 @@ import React from 'react';
 import Crousal from '../Crousal/Crousal';
 import News from '../News/News';
 import Itemlist from '../Itemlist/Itemlist';
-import SocialAccounts from '../SocialAccounts/SocialAcc';
 import Govt from '../GovertLogo/Govt';
 import Footers from '../Footers/Footers';
 import Cards from '../CardsOfficer/Cards';
@@ -19,7 +18,6 @@ const Homes = () => {
     <Itemlist />
     <Govt />
     <Footers />
-    <SocialAccounts />
     </>
   );
 }

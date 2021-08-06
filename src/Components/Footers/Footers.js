@@ -67,7 +67,14 @@ const Footers = () => {
                     </div>
 
                 </div>
-                </div>   
+                </div>  
+
+      <div className="mfs-auto" style={{color:'gray',textAlign:'center'}}>
+      
+        <span className="ml-1">ITP&copy; 2021 </span>
+        <span className="mr-1">Powered by</span>
+        <span>|Islamabad Traffic Police</span>
+      </div> 
             
         </div>
 

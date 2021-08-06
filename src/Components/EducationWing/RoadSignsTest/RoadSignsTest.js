@@ -1,7 +1,6 @@
 import React from 'react';
 import './RoadSignsTest.css';
 import Footers from '../../Footers/Footers'
-import SocialAccounts from '../../SocialAccounts/SocialAcc';
 import Navbar from '../../MenueBar/MenueBar';
 function RoadSignsTest() {
     return (
@@ -50,7 +49,7 @@ function RoadSignsTest() {
             </div>
 
             <Footers/>
-            <SocialAccounts />
+           
 
         </>
     )
