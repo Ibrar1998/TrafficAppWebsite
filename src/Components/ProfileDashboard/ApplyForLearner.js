@@ -135,7 +135,7 @@ const ApplyForLearner = () => {
       
         axios({
             method: "post",
-            url: "http://192.168.0.109:7777/user/learner",
+            url: API_URL+"/learner",
             data: userdata,
             headers: { "Content-Type": "multipart/form-data" },
           })

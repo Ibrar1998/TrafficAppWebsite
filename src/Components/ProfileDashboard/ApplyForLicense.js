@@ -437,7 +437,7 @@ const ApplyForLicense = () => {
                                        
                             
                                     </TabPane>
-                                    <TabPane tab="Challan Form" key="4">
+                                    <TabPane tab="License Form" key="4">
                                    
                                     
                                          <ProfileCard LicenseApplied={LicenseApplied}  />
