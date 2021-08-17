@@ -58,7 +58,7 @@ const Manubar = () => {
             }
                 </Dropdown>
                         <span>
-                        <Title level={3} style ={{ color: 'white'}}> <img src='./images/ITP.png' width='30px' alt="logo pic"></img> Islamabad Traffic Police</Title>
+                        <Title level={3} style ={{ color: 'white' , fontFamily : "revert"}}> <img src='./images/ITP.png' width='30px' alt="logo pic"></img> Islamabad Traffic Police</Title>
                         </span>
                 </Header>
                 </>

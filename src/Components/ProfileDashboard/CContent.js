@@ -1,7 +1,6 @@
 import React ,{useState}from 'react'
 import API_URL from '../../config';
-import { Image , Col, Row , Tabs  } from 'antd';
-const { TabPane } = Tabs;
+import { Image , Col, Row   } from 'antd';
 
 export default function CContent() {
     const [UserData, setUserData] = useState({});
@@ -13,20 +12,17 @@ React.useEffect(() => {
     
 }, []);
         
-    function callback(key) {
-            console.log(key);
-        }
     return (
         
         <>  
             <hr></hr>
-            <div style={{width: '100%' , background: '#6c9fe3' ,  padding : '20px 20px' , height : 400 }}>
+            <div style={{width: '100%' , background: 'whitesmoke' ,  padding : '20px 20px' , height : 300 }}>
             <Row>
             
                 <Col span={8}> 
                 <Image
-                width={300}
-                height={350}
+                width={250}
+                height={250}
                 src={`${API_URL}/${UserData.UserImage}`}
               
                 /> 
@@ -59,34 +55,11 @@ React.useEffect(() => {
                             </div>
                         :null
                     }
-                
-                
-
                 </Col>
                
             </Row>
             </div>     
             <hr></hr>
-            
-
-            <div>
-                <Tabs defaultActiveKey="1" onChange={callback}>
-                        <TabPane tab="Learner" key="1">
-                        Learner Tab 
-                        </TabPane>
-
-                        <TabPane tab="Lincense" key="2">
-                        Lincense  Tab 
-                        </TabPane>  
-
-                        <TabPane tab="Online Challan" key="3">
-                        Online Challan Tab
-                        </TabPane>
-                </Tabs>
-            </div>
-
-           
-
         </>
     )
 }

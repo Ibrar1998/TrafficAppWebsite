@@ -1,10 +1,16 @@
-import React,{useState} from 'react';
+import React,{useState , useEffect} from 'react';
 import Footers from '../Footers/Footers';
 import Navbar from '../MenueBar/MenueBar';
-import {   Form , Input  , Button } from 'antd';
+import {   Form , Input   } from 'antd';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
 import API_URL from '../../config';
+import Button from '@material-ui/core/Button';
+import { CAlert} from '@coreui/react';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
+
+
 import {
     CCardBody,
     CCol,
@@ -17,18 +23,29 @@ export default function BasicTextFields() {
 
   const [Cnic, setCnic] = useState('');
   const [spinnerLoading, setSpinnerLoading] = useState(false);
-const [Data, setData] = useState();
-const [ShowSearch, setShowSearch] = useState(true);
-     
+  const [Data, setData] = useState();
+  const [ShowSearch, setShowSearch] = useState(true);
+  const [checkalert, setcheckalert] = useState(false);
+  const [alertValue, setalertValue] = useState('');
+
   const onFinishFailed = (errorInfo ) => {
     console.log('Failed:', errorInfo);
   };
 
 
-  const onFinish = (values) => {
+  const submitHandle = (values) => {
     if(!Cnic){
         alert('Please Enter Cnic');
         return;
+    }
+
+    else{
+      let reg = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
+      if(reg.test(Cnic)===false){
+          setcheckalert(true);
+          setalertValue('Invalid Cnic Format!! \n e.g xxxxx-xxxxxxx-x')
+        return;
+      }
     }
   
   setSpinnerLoading(true)
@@ -47,10 +64,15 @@ const [ShowSearch, setShowSearch] = useState(true);
 
      console.log('Success:', values);
    };
+
+   useEffect(() => {
+                Aos.init({duration : 2000})
+             }, []);
+
   return (
       <>
       <Navbar />
-        <div className="container   pt-3" style={{height:"700px", width:"1600px" , border:"none" , marginTop:'2em'}}>
+        <div className="container  pt-3" data-aos="fade-up" style={{height:"700px", width:"1600px" , border:"none" , marginTop:'2em'  }}>
 
             <div className="row ">
                 <div className="col-12">
@@ -61,9 +83,19 @@ const [ShowSearch, setShowSearch] = useState(true);
                     labelCol={{ span: 4 }}
                     wrapperCol={{ span: 10 }}
                     initialValues={{ remember: true }}
-                    onFinish={onFinish}
+                    // onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
+                    style={{marginTop : '3em' ,border :'2px solid whitesmoke', padding : '60px 40px ', backgroundColor : 'whitesmoke' ,  boxShadow:' 0 10px 20px 0px rgba(0, 0, 0, 0.3)'}}
                     >
+                       {
+                           checkalert ? 
+                            <CAlert
+                                 color="danger"
+                            >
+                              <strong style={{alignItems:'center'}}>{alertValue}</strong>
+                                </CAlert>
+                                 :null
+                         }
                     <Form.Item
                         label="CNIC"
                         name="CNIC"
@@ -71,7 +103,18 @@ const [ShowSearch, setShowSearch] = useState(true);
                         rules={[{ required: false, message: 'Please input your CNIC!' }]}
                     >
                         <Input
-                        onChange={(e)=>setCnic(e.target.value)}
+                        onChange={(e)=>
+                          {
+                          setCnic(e.target.value)
+
+                          }
+                      }
+                      onFocus={() => 
+                        {
+                            setcheckalert(false)
+                            setCnic("")
+                        }
+                    } 
                         value={Cnic}
                         type='value'  placeholder='xxxxx-xxxxxxx-x' />
                     </Form.Item>
@@ -79,8 +122,11 @@ const [ShowSearch, setShowSearch] = useState(true);
                  
 
                     <Form.Item wrapperCol={{ offset: 4, span: 10 }}>
-                    <Button type="primary" htmlType='submit'>
-                    Submit
+                    <Button 
+                    variant="contained"
+                    color="primary" 
+                    onClick={submitHandle}>
+                          Submit
                     </Button>
                 </Form.Item>
                   <Loader

@@ -1,13 +1,19 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {Accordion , Card ,Button } from 'react-bootstrap';
 import Footers from '../Footers/Footers';
 import Navbar from '../MenueBar/MenueBar';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 
 const HowToApply = () => {
+        useEffect(() => {
+                Aos.init({duration : 2000})
+             }, []);
+
     return (
         <>
         <Navbar />
-            <div className="container" >
+            <div className="container" data-aos= "fade-up" >
             <Accordion style={{marginTop:'6em' , marginBottom : '6em'}}>
                     <h2 style={{ fontFamily:'Inter sans-serif', fontWeight:'1000' , fontSize:'2em'}}> How To Apply</h2>
                     <hr></hr>

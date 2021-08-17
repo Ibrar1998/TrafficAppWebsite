@@ -1,26 +1,67 @@
-import React from 'react';
-import CardDesign from './CardDesign';
+import React,{useEffect} from 'react';
+import "./Card-style.css";
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 
-
+ 
 const Cards = () => {
+
+    useEffect(() => {
+        Aos.init({duration : 2000})
+     }, []); 
+
+
     return (
         <>
-            <div className="container-fluid">
-                 <div className="row  d-flex justify-content-center ">  
-                    <div className="col-lg-3 col-md-6">
-                        <CardDesign img="./images/Qazi.jpg" titles="INSPECTOR GENERAL OF POLICE, ISLAMABAD" name="Qazi Jamil ur Rahman, PSP"/>
+            <div className="container" data-aos="fade-up" >
+                 <div className="row">  
+                    <div className="col-md-4" >
+                        <div className="card text-center">
+                            <div className="card-head-style pb-5">
+                                <h3 className="card-title" style={{fontSize:'20px'}}>INSPECTOR GENERAL OF POLICE</h3>
+                            </div>
+                            <div className="overflow">
+                                <img src="./images/Qazi.jpg"  alt="Officer" className="card-img-top" />
+                            </div>
+                            <div className="card-body text-dark">
+                                <div className="">
+                                        <h3 className="card-title name-style">Qazi Jamil ur Rahman</h3>
+                                </div>
+                            </div>     
+                        </div> 
                     </div>
-                    <div className="col-lg-3 col-md-6">
-                        <CardDesign img="./images/ssp.jpeg" titles="PSP SSP Traffic Division" name="Farrukh Rashid"/>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                        <CardDesign img="./images/sp.jpg" titles="ITP License Branch PSP" name="Qazi Jamil ur Rahman, "/>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                        <CardDesign img="./images/sd.png" titles="Station Director ITP FM" name="Mrs. Aisha Jamil "/>
-                    </div>
-                    
 
+                    <div className="col-md-4 ">
+                        <div className="card text-center">
+                            <div className="card-head-style pb-5">
+                                <h3 className="card-title" style={{fontSize:'20px'}}>PSP SSP Traffic Division</h3>
+                            </div>
+                            <div className="overflow">
+                                <img src="./images/ssp.jpeg"  alt="Officer" className="card-img-top" />
+                            </div>
+                            <div className="card-body ">
+                                <div className="">
+                                        <h3 className="card-title name-style">Farrukh Rashid</h3>
+                                </div>
+                            </div>     
+                        </div> 
+                    </div>
+
+                    <div className="col-md-4 ">
+                        <div className="card text-center">
+                            <div className="card-head-style pb-5">
+                                <h3 className="card-title" style={{fontSize:'20px'}}>ITP License Branch PSP</h3>
+                            </div>
+                            <div className="overflow">
+                                <img src="./images/sp.jpg" height='330px' alt="Officer" className="card-img-top" />
+                            </div>
+                            <div className="card-body text-dark">
+                                <div className="">
+                                        <h3 className="card-title name-style">Qazi Jamil ur Rahman</h3>
+                                </div>
+                            </div>     
+                        </div> 
+                    </div>
                 </div>
             </div>    
         </>

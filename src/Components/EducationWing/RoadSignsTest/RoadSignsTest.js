@@ -6,11 +6,11 @@ function RoadSignsTest() {
     return (
         <>
         <Navbar />
-            <div className="section" style={{backgroundColor:'whitesmoke' , paddingBottom:'10em'}}>
+            <div className="section" style={{backgroundColor:'white' , paddingBottom:'10em'}}>
 
                             <div className='container-fluid'>
-                                <div className='row'>
-                                    <div className="col-12 title-div">
+                                <div className='row justify-content-center' >
+                                    <div className="col-9 title-div">
                                         <h1 className="text-center">TAKE YOUR ROAD SIGNS TEST</h1>
                                     </div>
                                 </div>

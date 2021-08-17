@@ -11,7 +11,7 @@ const { Footer, Content } = Layout;
 const Profile = () => { 
     return (
         <>
-            <Layout>
+            <Layout >
              <Manubar/>
             <Layout> 
 
@@ -20,7 +20,7 @@ const Profile = () => {
             <Sidebarss />
             {/* sidebar menue for the dashboard starts there */}
 
-            <Layout>
+            <Layout style={{maxHeight : '640px'}}>
                     <Content style={{ padding: '0 50px' }}>
                             <Breadcrumb style={{ margin: '16px 0' }}>
                                 <Breadcrumb.Item><strong>Dashboard</strong> </Breadcrumb.Item>

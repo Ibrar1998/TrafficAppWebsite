@@ -12,9 +12,6 @@ import Manubar from './Manubar';
 
 const {   Footer, Content  } = Layout;
 
-
-
-
 const ApplyForLicense = () => {
         
         const [Vehicle, setVehicle] = useState('');  

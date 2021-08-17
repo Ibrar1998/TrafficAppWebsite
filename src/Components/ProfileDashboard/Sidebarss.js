@@ -25,6 +25,7 @@ const {  Sider } = Layout;
                 defaultSelectedKeys={['Dashboard']}
                 defaultOpenKeys={['Dashboard']}
                 mode="inline"
+
                 >
                 <Menu.Item key="Dashboard" >
 

@@ -1,17 +1,22 @@
-import React from 'react';
+import React , {useEffect} from 'react';
 import './itemlist-style.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Aos from 'aos';
+import 'aos/dist/aos.css';
+
 
 
 const Itemlist = () => {
 
-    
+    useEffect(() => {
+        Aos.init({duration : 2000})
+     }, []);
     return (
         <>
         <br></br>
         <br></br>
         <br></br>
-        <div className="main">
+        <div className="main" data-aos="fade-up">
             <div className="container  py-5 " >
                 <div className="row pt-4 text-center">
                     

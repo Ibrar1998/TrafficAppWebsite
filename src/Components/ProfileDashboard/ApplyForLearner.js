@@ -8,6 +8,8 @@ import { Button } from '@material-ui/core';
 import Sidebarss from './Sidebarss';
 import axios from 'axios';
 import Manubar from './Manubar';
+import { CAlert} from '@coreui/react';
+
 
 import API_URL from '../../config';
 
@@ -20,9 +22,7 @@ const ApplyForLearner = () => {
     const [CNIC,setCNIC] =  useState('');
     const [Name,setName] =  useState('');
     const [FName,setFname] =  useState('');
-    const [DriverType, setDriverType] = useState('');
     const [BloodGropup, setBloodGropup] = useState('');
-    const [Nationality, setNationality] = useState('');
     const [Adress, setAdress] = useState('');
     const [Dob, setDOB] = useState('');
     const [PhoneNum, setPhoneNum] = useState('');
@@ -31,18 +31,23 @@ const ApplyForLearner = () => {
     const [Gender, setGender] = useState('');
     const [ImagetoSend, setImagetoSend] = useState('');
     const [ImageUrl, setImageUrl] = useState('');
-    const [Height, setHeight] = useState('');
     const [UserID, setUserID] = useState('');
     const [PassPortNum, setPassPortNum] = useState('');
     const [LearnerApplied, setLearnerApplied] = useState({});
-   
+    const [checkalert, setcheckalert] = useState(false);
+    const [alertValue, setalertValue] = useState('');
+     
 
     const [isModalVisible, setIsModalVisible] = React.useState(false);
 
     const showModal = () => {
         setIsModalVisible(true);
     };
-    
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long", day: "numeric" }
+        return new Date(dateString).toLocaleDateString(undefined, options)+'   '+new Date(dateString).toLocaleTimeString()
+      }
+
     React.useEffect(() => {
         const userdata=JSON.parse(localStorage.getItem('UserData'));
         setUserID(userdata._id)
@@ -61,34 +66,48 @@ const ApplyForLearner = () => {
    
     const handleOk = (event) => {
         event.preventDefault();
-  
-
+        
         var userdata = new FormData();  
 
        if(!CNIC){
            alert("Please enter the CNIC");
            return;
        }
+
+       else{
+        let reg = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
+        if(reg.test(CNIC)===false){
+            setcheckalert(true);
+            setalertValue('Invalid Cnic Format!! \n e.g xxxxx-xxxxxxx-x')
+          return;
+        }
+      }
+
+
        if(!Name){
            alert("Please enter the Name");
            return;
        }
+       else {if (/[^a-zA-Z]/.test(Name)){
+          setcheckalert(true);
+          setalertValue('Invalid Name formate Alpha only !!')
+          return;
+        }}
+
        if(!FName){
         alert("Please enter the FName");
         return;
         }
 
-        if(!DriverType){
-            alert("Please enter the DriverType");
+        else {if (/[^a-zA-Z]/.test(FName)){
+            setcheckalert(true);
+            setalertValue('Invalid Father-Name formate Alpha only !!')
             return;
-        }
+          }}
+
+
         if(!BloodGropup){
             alert("Please enter the BloodGroup");
-            return;
-        }
-
-        if(!Nationality){
-            alert("Please enter the Nationality");
             return;
         }
         if(!Adress){
@@ -104,10 +123,14 @@ const ApplyForLearner = () => {
             alert("Please enter the Num");
             return;
         }
-        if(!VehType){
-            alert("Please enter the VehType");
+
+        else {if (!/[^a-zA-Z]/.test(PhoneNum)){
+            setcheckalert(true);
+            setalertValue('Invalid PhoneNum formate Numeric only !!')
             return;
-        }
+          }}
+
+        
    
             
         userdata.append('userimage',ImagetoSend);
@@ -115,27 +138,24 @@ const ApplyForLearner = () => {
         userdata.append('Name',Name);
         userdata.append('Fathername',FName);
         userdata.append('Cnic',CNIC);
-        userdata.append('DriverType',DriverType);
         userdata.append('BloodGropup',BloodGropup);
-        userdata.append('Nationality',Nationality);
         userdata.append('Address',Adress);
         userdata.append('Dob',Dob);
         userdata.append('PhoneNum',PhoneNum);
          userdata.append('CitizenType',Citizen);
          userdata.append('VehType',VehType);
-         userdata.append('Height',Height);
          userdata.append('Gender',Gender);
          userdata.append('PassPortNum',PassPortNum);
          
          
          
        
-    //    // axious calling  console.log(userdata)
+      console.log(userdata)
 
       
         axios({
             method: "post",
-            url: API_URL+"/learner",
+            url: API_URL+"/user/learner",
             data: userdata,
             headers: { "Content-Type": "multipart/form-data" },
           })
@@ -158,26 +178,15 @@ const ApplyForLearner = () => {
       const handleCancel = () => {
         setIsModalVisible(false);
       };
-
-
-    // const handleClick = e => {
-    //     console.log('click ', e);
-    //   };
-
       function callback(key) {
         console.log(key);
       }
       
     // Styling of the from components 
       const layout = {
-        
-        wrapperCol: { span: 12 },
+            wrapperCol: { span: 12 },
       };
-
-  
-
-           
-                
+        
     return (
         <>
             <Layout style={{height:'900px'}}>
@@ -257,18 +266,26 @@ const ApplyForLearner = () => {
 
             {/* uploading picture of over user ends here */}
 
-
+            {
+          checkalert ? 
+       
+                  <CAlert
+            color="danger"
+          >
+            <strong style={{alignItems:'center'}}>{alertValue}</strong>
+          </CAlert>
+          :null
+            }
+            
 
             <Form.Item name="" label="">
             <Radio.Group
             onChange={(e) => setVehType(e.target.value)}
             value={VehType}
             >
-            <Radio value="Motor Cycle">Motor Cycle</Radio>
-            <Radio value="Motor Car">Motor Car</Radio>
+            
             <Radio value="LTV">LTV</Radio>
             <Radio value="HTV">HTV</Radio>
-            <Radio value="Motor Rickshaw">Motor Rickshaw</Radio>
             </Radio.Group>
             </Form.Item>
 
@@ -287,7 +304,13 @@ const ApplyForLearner = () => {
                 >
                 <Input style={{marginLeft : '9.8em'}} 
                 onChange={(e) => setCNIC(e.target.value)}
-                value={CNIC}   
+                value={CNIC} 
+                onFocus={() => 
+                    {
+                        setcheckalert(false)
+                        setCNIC('')
+                    }
+                }  
                 />
                 </Form.Item>
 
@@ -315,24 +338,6 @@ const ApplyForLearner = () => {
                 />
                 </Form.Item>
 
-                <Form.Item label="Driver Type">
-                    <Select 
-                    style={{marginLeft : '7.8em'}}
-                    
-                    value={DriverType}
-                    
-                    onSelect={(value)=>{
-                        setDriverType(value)
-                    }
-                        } 
-                
-                    >
-                        <Select.Option   value="Automatic Transmission" >Automatic Transmission</Select.Option>
-                        <Select.Option   value="Manual Transmission" >Manual Transmission</Select.Option>
-                        <Select.Option    value="Handicapped" >Handicapped</Select.Option>
-                    </Select>
-                </Form.Item>
-
                 <Form.Item label="Blood Group">
                 <Select
                     style={{marginLeft : '7.2em'}}
@@ -352,19 +357,6 @@ const ApplyForLearner = () => {
                 </Form.Item>
 
                 <Form.Item
-                label="Nationality"
-                name="Nationality"
-                rules={[{ required: true, message: 'Please input your Nationality!' }]}
-                
-                >
-                <Input style={{marginLeft : '7.2em'}}
-                onChange={(e) => setNationality(e.target.value)}
-                value={Nationality} 
-
-                />
-                </Form.Item>
-
-                <Form.Item
                 label="Street/Address"
                 name="Address "
                 rules={[{ required: true, message: 'Please input your compilete Address !' }]}
@@ -375,9 +367,7 @@ const ApplyForLearner = () => {
                 value={Adress}   
                 />
                 </Form.Item>
-
-                
-                </Col>
+            </Col>
 
 
                 <Col span={12}><strong>Passport Number</strong>
@@ -444,20 +434,11 @@ const ApplyForLearner = () => {
                 >
                 <Input style={{marginLeft : '8.3em'}} 
                     onChange={(e) => setPhoneNum(e.target.value)}
-                value={PhoneNum}   
+                    value={PhoneNum}
+                       
                 />
                 </Form.Item>
-                
-                <Form.Item
-                label="Height"
-                name="Height "
-                >
-                <Input style={{marginLeft : '8.9em'}}
-                    onChange={(e) => setHeight(e.target.value)}
-                    value={Height}
-                />
-                </Form.Item>
-                
+                                
                 </Col>
 
 
@@ -494,7 +475,7 @@ const ApplyForLearner = () => {
                                                 <td>{LearnerApplied.Username}</td>
                                                 <td>{LearnerApplied.Cnic}</td>
                                                 <td>{LearnerApplied.Dob}</td>
-                                                <td>{LearnerApplied.LearnerAppleidDate}</td>
+                                                <td>{formatDate(LearnerApplied.LearnerAppleidDate)}</td>
                                               <td>{LearnerApplied._id}</td>
                                             </tbody>            
                                             </table>

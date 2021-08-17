@@ -11,6 +11,9 @@ import axios from 'axios';
 import ProfileCard from './ProfileCard';
 import {CBadge,  CButton,} from '@coreui/react'
 import PrintComponents from "react-print-components";
+import { CAlert} from '@coreui/react';
+
+
 
 const { TabPane } = Tabs;
 const {  Footer, Content } = Layout;
@@ -29,6 +32,9 @@ const ApplyForLicense = () => {
     const [Occupation, setOccupation] = useState('');
     const [LicenseType, setLicenseType] = useState('');
     const [LicenseApplied, setLicenseApplied] = useState({});
+    const [checkalert, setcheckalert] = useState(false);
+    const [alertValue, setalertValue] = useState('');
+   
     ///////////////////////////////
   
     const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -64,16 +70,31 @@ const ApplyForLicense = () => {
         setIsModalVisible(true);
     };
 
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long", day: "numeric" }
+        return new Date(dateString).toLocaleDateString(undefined, options)+'   '+new Date(dateString).toLocaleTimeString()
+      }
+
     const handleOk = (event) => {
         event.preventDefault();
         if(!Name){
             alert('Please Enter Name');
             return;
         }
+        else {if (/[^a-zA-Z]/.test(Name)){
+            setcheckalert(true);
+            setalertValue('Invalid Name formate Alpha only !!')
+            return;
+          }}
         if(!FName){
             alert('Please Enter father');
             return;
         }
+        else {if (/[^a-zA-Z]/.test(FName)){
+            setcheckalert(true);
+            setalertValue('Invalid Father-Name formate Alpha only !!')
+            return;
+          }}
         if(!Adress){
             alert('Please Enter Addres');
             return;
@@ -86,6 +107,14 @@ const ApplyForLicense = () => {
             alert('Please Enter Cnic');
             return;
         }
+        else{
+            let reg = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
+            if(reg.test(CNIC)===false){
+                setcheckalert(true);
+                setalertValue('Invalid Cnic Format!! \n e.g xxxxx-xxxxxxx-x')
+              return;
+            }
+          }
         if(!Occupation){
             alert('Please Enter Occupation');
             return;
@@ -97,7 +126,14 @@ const ApplyForLicense = () => {
         if(!PhoneNum){
             alert('Please Enter Mobile number');
             return;
-        }if(!LicenseType){
+        }
+        else {if (/[^a-zA-Z]/.test(PhoneNum)){
+            setcheckalert(true);
+            setalertValue('Invalid PhoneNum formate Numeric only !!')
+            return;
+          }}
+
+        if(!LicenseType){
             alert('Please Enter Check License Type');
             return;
         }
@@ -227,7 +263,16 @@ const ApplyForLicense = () => {
 
                                                                                     <Col span={24}><strong>APPLICANT'S DATA</strong> 
                                                                                             <br></br><br></br>
-                                                                                            
+                                                                                            {
+                                                                                                    checkalert ? 
+                                                                                                
+                                                                                                            <CAlert
+                                                                                                        color="danger"
+                                                                                                    >
+                                                                                                        <strong style={{alignItems:'center'}}>{alertValue}</strong>
+                                                                                                    </CAlert>
+                                                                                                    :null
+                                                                                                        }
                                                                                         <Row >
                                                                                             <Col sm={24} className='text-center'>
                                                                                             <Form.Item >
@@ -356,14 +401,8 @@ const ApplyForLicense = () => {
                                                                                                 </Checkbox>
                                                                                         
                                                                                         </Col>
-                                                                           
-                                                                           
-                                                                </Row>
+                                                                                    </Row>
                                                                 <br></br>
-                                                                
-                                                                 
-
-                                                                
                                                             </Form>
                                                         
                                                     </Modal>
@@ -391,7 +430,7 @@ const ApplyForLicense = () => {
                                             <tbody>
                                                 <td>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Name:null}</td>
                                                 <td>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Dob:null}</td>
-                                                <td>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseAppleidDate:null}</td>
+                                                <td>{LicenseApplied.LicenseInfo? formatDate( LicenseApplied.LicenseAppleidDate):null}</td>
                                               <td>{LicenseApplied._id}</td>
                                               <td><CBadge color={getBadge(LicenseApplied.Status)}>
                                                     {LicenseApplied.Status}
@@ -439,16 +478,20 @@ const ApplyForLicense = () => {
                                     </TabPane>
                                     <TabPane tab="License Form" key="4">
                                    
-                                    
-                                         <ProfileCard LicenseApplied={LicenseApplied}  />
+                                       
+                                       
                                         {
-                                            LicenseApplied._id?
+                                            LicenseApplied.Status==='Approved'?
+                                            <>
+                                            <ProfileCard LicenseApplied={LicenseApplied}  />
                                             <PrintComponents
                                             trigger={<CButton   color="success" >Download pdf</CButton>}
                                             >
                                           <ProfileCard LicenseApplied={LicenseApplied}  />
                                             </PrintComponents>
-                                            :null
+                                               
+                                               </>
+                                            : <h2>You have't Passed your License test Yet so you can't  continue to Medical and Driving Test</h2>
                                         }
                                            
                                        

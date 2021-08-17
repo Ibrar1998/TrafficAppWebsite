@@ -1,12 +1,18 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import Footers from '../Footers/Footers';
 import Navbar from '../MenueBar/MenueBar';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 
 export default function AboutITP() {
+  useEffect(() => {
+    Aos.init({duration : 2000})
+ }, []); 
+
   return (
     <>
                    <Navbar />
-                        <div className="section" style={{backgroundColor:'whitesmoke' , paddingTop:'5em' ,paddingBottom:'5em'}}>
+                        <div className="section" style={{backgroundColor:'white' , paddingTop:'5em' ,paddingBottom:'5em'}} data-aos="fade-up">
 
                   
                   <div className="container">

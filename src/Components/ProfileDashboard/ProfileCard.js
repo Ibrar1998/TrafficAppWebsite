@@ -14,8 +14,8 @@ function ProfileCard(props) {
     return (
         <>
          <CCard style={{width:1100}}>
-                                        {
-                                        LicenseApplied.LicenseTest==='Passed'?
+                                        
+                                      
                                         <CCardBody>
                                         <CRow>
                                             <CCol sm={1}></CCol>
@@ -54,13 +54,13 @@ function ProfileCard(props) {
                                     
                                     
                                     </CCardBody>     
-                                        :
-                                        <h2>You have't Passed your License test Yet so you can't  continue to Medical and Driving Test</h2>
+                                        
+                                       
 
 
                                         
                     
-                                        }
+                                        
                                        
                                     </CCard>
         </>

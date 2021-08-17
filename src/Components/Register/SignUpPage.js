@@ -1,10 +1,10 @@
-import React,{useState} from 'react';
+import React,{useState , useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -16,6 +16,11 @@ import Navbar from '../MenueBar/MenueBar'
 import axios from 'axios';
 import API_URL from '../../config';
 import Loader from "react-loader-spinner";
+import { CAlert} from '@coreui/react';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
+
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,6 +51,9 @@ export default function SignUp() {
   const [Password, setPassword] = useState('');
   const [ConfirmPassword, setConfirmPassword] = useState('');
   const [spinnerLoading, setSpinnerLoading] = useState(false);
+  const [checkUName, setcheckUName] = useState(false);
+  const [emailCheck, setemailCheck] = useState(false);
+  const [cnicCheck, setcnicCheck] = useState(false);
 
   const SubmitSignuP =(event)=>{
     event.preventDefault();
@@ -53,14 +61,37 @@ export default function SignUp() {
       alert('Fill in Username');
       return;
     }
+   
+    else {if (/[^a-zA-Z]/.test(Username)){
+      setcheckUName(true);
+        return;
+      }}
+    
     if(!Email){
       alert('Fill in Email');
       return;
     }
+    else {
+      let reg = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w\w+)+$/;
+      if(reg.test(Email)===false){
+            setemailCheck(true);
+        return;
+      }            
+    }
+
     if(!Cnic){
       alert('Fill in Cnic');
       return;
     }
+    else{
+      let reg = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
+      if(reg.test(Cnic)===false){
+        setcnicCheck(true);
+        return;
+      }
+    }
+
+
     if(!Password){
       alert('Fill in Password');
       return;
@@ -95,13 +126,18 @@ export default function SignUp() {
     
 
   }
+
+  
+  useEffect(() => {
+    Aos.init({duration : 2000})
+ }, []); 
   
 
   return (
 
     <> 
     <Navbar />
-    <Container component="main" maxWidth="xs" style={{paddingBottom:'10em'}}>
+    <Container component="main" maxWidth="xs" style={{paddingBottom:'10em'}} data-aos="fade-up">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -115,26 +151,43 @@ export default function SignUp() {
           <Grid container spacing={2}>
           <Grid item xs={12}>
               <TextField
-                variant="outlined"
+                
                 required
                 fullWidth
                 id="FullName"
                 label="FullName"
                 name="FullName"
                 value={Username}
-                onChange={(e)=>setUsername(e.target.value)}
+                onChange={
+                (e)=>setUsername(e.target.value)}
+                onFocus={() => {
+                  setcheckUName(false)
+                  setUsername('');
+                }}
                 autoComplete="FullName"
+                
               />
+
+        
             </Grid>
-            
             <Grid item xs={12}>
-                    <p style={{color:'red'}}>* Note: Please provide your full name as per matriculation certificate.</p>
-            </Grid>
+            {
+          checkUName ? 
+       
+                  <CAlert
+            color="danger"
+          >
+            <strong style={{alignItems:'center'}}>Invalid UName Alphabets only !!</strong>
+          </CAlert>
+          :null
+        }  
+        </Grid>
+          
 
 
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
+               
                 required
                 fullWidth
                 id="email"
@@ -143,12 +196,29 @@ export default function SignUp() {
                 autoComplete="email"
                 value={Email}
                 onChange={(e)=>setEmail(e.target.value)}
+                onFocus={() => {
+                  setemailCheck(false)
+                  setEmail('');
+                }}
               />
             </Grid>
 
             <Grid item xs={12}>
+            {
+          emailCheck ? 
+       
+                  <CAlert
+            color="danger"
+          >
+            <strong style={{alignItems:'center'}}>Invalid Email Formate eg.abc@xyz.com !!</strong>
+          </CAlert>
+          :null
+        }  
+        </Grid>
+
+            <Grid item xs={12}>
               <TextField
-                variant="outlined"
+               
                 required
                 fullWidth
                 id="CNIC"
@@ -161,24 +231,22 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12}>
-                    <ul style={{color:'red'}}>
-                        
-                        <h6>*Note</h6>
-                        
-                        <li>
-                        
-                            Please use your own CNIC number to register.
-                        </li>
-                        <li>
-                            CNIC can not be changed after registration.
-                        </li>
+            {
+            cnicCheck ? 
+       
+                  <CAlert
+            color="danger"
+          >
+            <strong style={{alignItems:'center'}}>Invalid Cnic Format!! \n e.g xxxxx-xxxxxxx-x</strong>
+          </CAlert>
+          :null
+        }  
+        </Grid>
 
-                    </ul>
-            </Grid>
+           
 
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
                 required
                 fullWidth
                 name="password"
@@ -193,7 +261,7 @@ export default function SignUp() {
 
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
+                
                 required
                 fullWidth
                 name="password"
@@ -207,12 +275,12 @@ export default function SignUp() {
             </Grid>
 
 
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration updates via email."
               />
-            </Grid>
+            </Grid> */}
 
 
           </Grid>

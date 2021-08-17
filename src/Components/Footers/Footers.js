@@ -1,10 +1,16 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import './Footers.css';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 
 const Footers = () => {
+    useEffect(() => {
+        Aos.init({duration : 2000})
+     }, []);
+
     return (
         <>
-            <div className="bg-dark ">
+            <div className="bg-dark " data-aos="fade-up">
             <div className="container width-style py-5 ">
                 <div className="row text-white">
                     
@@ -69,7 +75,7 @@ const Footers = () => {
                 </div>
                 </div>  
 
-      <div className="mfs-auto" style={{color:'gray',textAlign:'center'}}>
+      <div className="mfs-auto" style={{color:'gray',textAlign:'center' }}>
       
         <span className="ml-1">ITP&copy; 2021 </span>
         <span className="mr-1">Powered by</span>

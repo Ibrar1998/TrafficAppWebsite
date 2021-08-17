@@ -1,29 +1,28 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import {Navbar , Nav , NavDropdown} from 'react-bootstrap';
 import './Navbar.css';
+import Button from '@material-ui/core/Button';
+
 
 
 const MenueBar = () =>  {
-
+   
   return (
       <>
-
-    <div className="full-change">
+        <div className="full-change" >
             <div className="container-fluid">
                 <div className="row">
-                                <div className="col-md-2 d-flex justify-content-start ">
+                                <div className="col-md-6  ">
                                       <Link to='/'>
-                                       <img src="./images/ITP.png" className="my-1" alt="ITP" width="60px" height="60px"></img>
+                                      <span className="d-flex justify-content-start">
+                                       <img src="./images/ITP.png" className="my-2" alt="ITP" width="40px" height="40px"></img>
+                                       <h3 className='my-3 px-2' style={{fontSize : '20px'}}>Islmabad Traffic Police</h3></span>
                                        </Link>
-                                        
                                 </div>
                         
-                                   
-
-                                    <div className="col-md-10 d-flex justify-content-end ">
-
-                                      
+                                <div className="col-md-6 d-flex justify-content-end ">
+                                    
                                         <Navbar>
                                             <Nav className="Menue-style ">
                                                 <Nav.Link className="Menue-icon-style">
@@ -35,15 +34,7 @@ const MenueBar = () =>  {
                                                               </Link>
                                                 </Nav.Link>
 
-                                                <Nav.Link  className="Menue-icon-style">
-                                                  <Link 
-                                                  to='/AboutITP' 
-                                                  style={{color:'black' , textDecoration:'none'}}
-                                                 
-                                                  >
-                                                    ABOUT ITP
-                                                    </Link>
-                                                </Nav.Link>
+                                               
                                             
 
                                                
@@ -113,11 +104,23 @@ const MenueBar = () =>  {
                                                 
                                                 </NavDropdown>
 
+                                                <Nav.Link  className="Menue-icon-style">
+                                                  <Link 
+                                                  to='/AboutITP' 
+                                                  style={{color:'black' , textDecoration:'none'}}
+                                                 
+                                                  >
+                                                    ABOUT ITP
+                                                    </Link>
+                                                </Nav.Link>
+
+
+
                                                 
                                                 
                                                 <Nav.Link >
                                                               <Link to='/Login' >
-                                                                 <button className="btn btn-primary" style={{width:'100px' , height: '35px' }}> LOGIN </button>
+                                                                 <Button variant="contained" color="primary"  style={{width:'100px' , height: '35px' }}> LOGIN </Button>
                                                               </Link>
                                                 </Nav.Link>
                                             
@@ -125,11 +128,10 @@ const MenueBar = () =>  {
                                             </Nav>
                                         </Navbar>
                                     </div>        
-                                   
-                </div>
-            </div>
-        </div> 
-    </>
+                                </div>
+                            </div>
+                        </div> 
+                    </>
   );
 }
 

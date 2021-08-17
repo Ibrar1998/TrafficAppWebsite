@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState , useEffect} from 'react';
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -13,7 +13,12 @@ import Container from '@material-ui/core/Container';
 import API_URL from '../../config';
 import { Base64 } from 'js-base64';
 import Loader from "react-loader-spinner";
-import { CAlert} from '@coreui/react'
+import { CAlert} from '@coreui/react';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
+
+
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(20),
@@ -34,23 +39,38 @@ export default function SignIn() {
   const classes = useStyles();
   const [Email, setEmail] = useState('');
   const [password, setpassword] = useState('');
+  const [emailAlert, setemailAlert] = useState(false);
+  
+  // const [submitted, setsubmitted] = useState(false);
+
   const [spinnerLoading, setSpinnerLoading] = useState(false);
   const [Alert, setAlert] = React.useState(false);
-
   
+      
         const SubmitLogin = (event) =>
         {
         event.preventDefault();
+       
         setAlert(false);
+
           if (!Email) {
             alert('Please fill Email');
             return;
           }
+          else {
+            let reg = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w\w+)+$/;
+            if(reg.test(Email)===false){
+                  setemailAlert(true);
+              return;
+            }            
+          }
+            setemailAlert(false);
           if (!password) {
             alert('Please fill Password');
             return;
           }
-
+          
+        
        //   console.log(CNIC , password);
        setSpinnerLoading(true)
           axios.post(API_URL+'/login/',{
@@ -69,37 +89,19 @@ export default function SignIn() {
               setSpinnerLoading(false);
               window.location='/Profile'
             }
-          }
-              
-          
-               
-           
-           
-            
-          )
+          })
           .catch(err=>console.log(err));
+          }
 
-        
-
-
-          
-        }
-
-      
-
-
+          useEffect(() => {
+            Aos.init({duration : 2000})
+         }, []); 
 
 
   return (
-
-
-   
-    <Container component="main" maxWidth="xs" style={{paddingBottom:'10em'}}>
-     
-    
   
-      
-      <CssBaseline />
+  <Container component="main" maxWidth="xs" style={{paddingBottom:'10em'}} data-aos="fade-up">
+     <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -108,13 +110,31 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <form noValidate>
-       
-     
         
+       <form noValidate> 
+       
+        {
+          Alert ? 
+       
+                  <CAlert
+            color="danger"
+          >
+            <strong style={{alignItems:'center'}}>Invalid Username and Password!!</strong>
+          </CAlert>
+          :null
+        }
 
+        {
+          emailAlert ? 
+       
+                  <CAlert
+            color="danger"
+          >
+            <strong style={{alignItems:'center'}}>Invalid Email Formate eg.abc@xyz.com !!</strong>
+          </CAlert>
+          :null
+        }
           <TextField
-            variant="outlined"
             margin="normal"
             required
             fullWidth
@@ -123,12 +143,13 @@ export default function SignIn() {
             name="Email"
             autoComplete="Email"
             autoFocus
+            onFocus={() => setemailAlert(false)}
             value={Email} 
-            onChange={ (e) => setEmail(e.target.value)}
-
+            onChange={(event) => setEmail(event.target.value)}
+          
           />
+          
           <TextField
-            variant="outlined"
             margin="normal"
             required
             fullWidth
@@ -136,8 +157,9 @@ export default function SignIn() {
             label="Password"
             type="password"
             id="password"
+            value={password}
             autoComplete="current-password"
-            onChange={(e) =>setpassword(e.target.value)}
+            onChange={(event) => setpassword(event.target.value)}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -151,16 +173,7 @@ export default function SignIn() {
               width={60}
               visible={spinnerLoading}
             />
-             {
-          Alert ? 
-       
-                  <CAlert
-            color="danger"
-          >
-            <strong style={{alignItems:'center'}}>Invalid Username and Password!!</strong>
-          </CAlert>
-          :null
-        }
+             
           <Button
             type="submit"
             fullWidth
@@ -183,8 +196,8 @@ export default function SignIn() {
               </Link>
             </Grid>
           </Grid>
-        
-        </form>
+       
+        </form> 
       </div>
       
     </Container>

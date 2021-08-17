@@ -17,22 +17,20 @@ import Profile from './Components/ProfileDashboard/Profile';
 import ApplyForLearner from './Components/ProfileDashboard/ApplyForLearner';
 import ApplyForLicense from './Components/ProfileDashboard/ApplyForLicense';
 import PayChallan from './Components/ProfileDashboard/PayChallan';
+import DemoTest from './Components/Servicess/DemoTest';
 
 
 const App = () => {
      
  return (
-
-
-      <>
-        <Router>
-       
-      
-        <Switch>
+  <>
+    <Router>
+       <Switch>
           <Route path='/' exact component={Home} />
 
                     <Route path='/HowToApplyy' component={HowToApplyy} />
                     <Route path ="/VerifyLicense" component={VerifyLicense} />
+                    <Route path ="/DemoTest" component={DemoTest} />
 
                     <Route path='/RoadSignsTest' component={RoadSignsTest} />
                     <Route path='/TrafficViolations' component={TrafficViolations} />
@@ -48,14 +46,10 @@ const App = () => {
                   <Route path ='/ApplyForLearner' component={ApplyForLearner}/>
                   <Route path ='/ApplyForLicense' component={ApplyForLicense}/>
                   <Route path ='/PayChallan' component={PayChallan}/>
-                </Switch>
-    </Router>
+            </Switch>
+          </Router>
       </>
-    
-    
-
-  );
-}
+  );}
 
 export default App;
 
