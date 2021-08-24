@@ -9,7 +9,7 @@ import Sidebarss from './Sidebarss';
 import axios from 'axios';
 import Manubar from './Manubar';
 import { CAlert} from '@coreui/react';
-
+import {  toast } from 'react-toastify';
 
 import API_URL from '../../config';
 
@@ -33,7 +33,7 @@ const ApplyForLearner = () => {
     const [ImageUrl, setImageUrl] = useState('');
     const [UserID, setUserID] = useState('');
     const [PassPortNum, setPassPortNum] = useState('');
-    const [LearnerApplied, setLearnerApplied] = useState({});
+    const [LearnerApplied, setLearnerApplied] = useState([]);
     const [checkalert, setcheckalert] = useState(false);
     const [alertValue, setalertValue] = useState('');
      
@@ -43,6 +43,23 @@ const ApplyForLearner = () => {
     const showModal = () => {
         setIsModalVisible(true);
     };
+    function underAgeValidate(birthday){
+      // it will accept two types of format yyyy-mm-dd and yyyy/mm/dd
+      var optimizedBirthday = birthday.replace(/-/g, "/");
+      //set date based on birthday at 01:00:00 hours GMT+0100 (CET)
+      var myBirthday = new Date(optimizedBirthday);
+      // set current day on 01:00:00 hours GMT+0100 (CET)
+      var currentDate = new Date().toJSON().slice(0,10)+' 01:00:00';
+      // calculate age comparing current date and borthday
+      var myAge = ~~((Date.now(currentDate) - myBirthday) / (31557600000));
+      if(myAge < 18) {
+               return false;
+            }else{
+          return true;
+      }
+    }
+
+
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric" }
         return new Date(dateString).toLocaleDateString(undefined, options)+'   '+new Date(dateString).toLocaleTimeString()
@@ -69,6 +86,17 @@ const ApplyForLearner = () => {
         
         var userdata = new FormData();  
 
+      
+        if(!ImagetoSend){
+          alert("Please Upload Your Img");
+          return;
+      }
+      
+      if(!VehType){
+        alert("Select  Vehicle Type");
+        return;
+    }
+
        if(!CNIC){
            alert("Please enter the CNIC");
            return;
@@ -87,23 +115,22 @@ const ApplyForLearner = () => {
        if(!Name){
            alert("Please enter the Name");
            return;
-       }
-       else {if (/[^a-zA-Z]/.test(Name)){
-          setcheckalert(true);
-          setalertValue('Invalid Name formate Alpha only !!')
-          return;
-        }}
+       }    //!()
+       else if(!(/^[a-zA-Z\s]*$/).test(Name)){
+        setcheckalert(true);
+        return setalertValue('Invalid UserName formate Alphabat only !!')
+        
+      }
 
-       if(!FName){
+        if(!FName){
         alert("Please enter the FName");
         return;
         }
-
-        else {if (/[^a-zA-Z]/.test(FName)){
-            setcheckalert(true);
-            setalertValue('Invalid Father-Name formate Alpha only !!')
-            return;
-          }}
+        else if (!(/^[a-zA-Z\s]*$/).test(FName)){
+          setcheckalert(true);
+          return setalertValue('Invalid FatherName formate Alphabat only !!')
+          
+        }
 
 
         if(!BloodGropup){
@@ -114,17 +141,30 @@ const ApplyForLearner = () => {
             alert("Please enter the Address");
             return;
         }
-       
+        if(!PassPortNum){
+          alert("Please enter the PassPort No");
+          return;
+      } else {if (!(/^\d{8}$/).test(PassPortNum)){
+        setcheckalert(true);
+        setalertValue('Passport No. must be 8 digit! ')
+        return;
+      }}
         if(!Dob){
             alert("Please enter the DOB");
             return;
+        }else{
+          const valid =  underAgeValidate(Dob);
+          if(!valid){
+            toast.error('Your Date of Birth must be 18 +');
+            return;
+          }
         }
         if(!PhoneNum){
-            alert("Please enter the Num");
+            alert("Please enter the Mobile No.");
             return;
         }
 
-        else {if (!/[^a-zA-Z]/.test(PhoneNum)){
+        else {if (!(/^\d{11}$/).test(PhoneNum)){
             setcheckalert(true);
             setalertValue('Invalid PhoneNum formate Numeric only !!')
             return;
@@ -161,6 +201,7 @@ const ApplyForLearner = () => {
           })
             .then(function (response) {
               console.log(response);
+              toast.success('Your Learner Application has been submitted successfully');
             })
             .catch(function (response) {
               console.log(response);
@@ -186,6 +227,34 @@ const ApplyForLearner = () => {
       const layout = {
             wrapperCol: { span: 12 },
       };
+
+      const data=  LearnerApplied.map((item,index)=>
+                
+                       
+      <tr key={index}>
+      <td>
+        {
+
+          item.Username
+        }
+      </td>
+     
+      <td >
+        {item.Cnic}
+      </td>
+      <td>
+      <div>
+      <strong >{item.Dob}</strong>
+       </div>
+      </td>
+      <td>
+      {formatDate(item.LearnerAppleidDate)}
+      </td>
+      <td>
+        {item.Vahicletype}
+      </td>
+    </tr> 
+  ) 
         
     return (
         <>
@@ -322,7 +391,8 @@ const ApplyForLearner = () => {
                 >
                 <Input style={{marginLeft : '9.4em'}}
                     onChange={(e) => setName(e.target.value)}
-                    value={Name}   
+                    value={Name}  
+                    onFocus={()=>setcheckalert(false)} 
                 />
                 </Form.Item>
 
@@ -330,7 +400,7 @@ const ApplyForLearner = () => {
                 label="Father/Husband Name"
                 name="Father/Husband Name"
                 rules={[{ required: true, message: 'Please input your Father/Husband!' }]}
-                
+                onFocus={()=>setcheckalert(false)}
                 >
                 <Input style={{marginLeft : '2em'}} 
                 onChange={(e) => setFname(e.target.value)}
@@ -381,6 +451,7 @@ const ApplyForLearner = () => {
                 <Input style={{marginLeft : '4.3em'}} 
                 onChange={(e)=>setPassPortNum(e.target.value)}
                 value={PassPortNum}
+                onFocus={()=>setcheckalert(false)}
                 />
                 </Form.Item>
 
@@ -430,7 +501,7 @@ const ApplyForLearner = () => {
                 label="Phone"
                 name="Phone "
                 rules={[{ required: true, message: 'Please input your Phone!' }]}
-                
+                onFocus={()=>setcheckalert(false)}
                 >
                 <Input style={{marginLeft : '8.3em'}} 
                     onChange={(e) => setPhoneNum(e.target.value)}
@@ -472,11 +543,10 @@ const ApplyForLearner = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <td>{LearnerApplied.Username}</td>
-                                                <td>{LearnerApplied.Cnic}</td>
-                                                <td>{LearnerApplied.Dob}</td>
-                                                <td>{formatDate(LearnerApplied.LearnerAppleidDate)}</td>
-                                              <td>{LearnerApplied._id}</td>
+                                              
+                                              {
+                                                data
+                                              }
                                             </tbody>            
                                             </table>
                                                       </>

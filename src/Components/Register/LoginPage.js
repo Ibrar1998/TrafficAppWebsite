@@ -13,9 +13,10 @@ import Container from '@material-ui/core/Container';
 import API_URL from '../../config';
 import { Base64 } from 'js-base64';
 import Loader from "react-loader-spinner";
-import { CAlert} from '@coreui/react';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
+import { toast } from "react-toastify";
+
 
 
 
@@ -39,40 +40,34 @@ export default function SignIn() {
   const classes = useStyles();
   const [Email, setEmail] = useState('');
   const [password, setpassword] = useState('');
-  const [emailAlert, setemailAlert] = useState(false);
   
-  // const [submitted, setsubmitted] = useState(false);
 
   const [spinnerLoading, setSpinnerLoading] = useState(false);
-  const [Alert, setAlert] = React.useState(false);
   
       
         const SubmitLogin = (event) =>
         {
         event.preventDefault();
        
-        setAlert(false);
 
           if (!Email) {
-            alert('Please fill Email');
-            return;
+           
+            return  toast.warning('Please fillout Email field');
+            
           }
           else {
-            let reg = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w\w+)+$/;
+            let reg =/^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w\w+)+$/;
             if(reg.test(Email)===false){
-                  setemailAlert(true);
+                  toast.error('Invalid Email Formate eg.abc@xyz.com !!');
               return;
             }            
           }
-            setemailAlert(false);
           if (!password) {
-            alert('Please fill Password');
-            return;
+            return toast.warning('Please fillout Password field');
+            
           }
           
-        
-       //   console.log(CNIC , password);
-       setSpinnerLoading(true)
+         setSpinnerLoading(true)
           axios.post(API_URL+'/login/',{
             Email:Email,
             Password: Base64.encode(password)
@@ -82,13 +77,18 @@ export default function SignIn() {
               console.log(res)
               if(res.data.message){
                 setSpinnerLoading(false);
-                setAlert(true);
+                toast.error('Invalid Email or Password.');
               }
             if(res.data[0].Role){
               localStorage.setItem('UserData',JSON.stringify(res.data[0]));
               setSpinnerLoading(false);
               window.location='/Profile'
+              
+              toast.success("You are login Successfully");
+              
             }
+           
+
           })
           .catch(err=>console.log(err));
           }
@@ -113,27 +113,7 @@ export default function SignIn() {
         
        <form noValidate> 
        
-        {
-          Alert ? 
-       
-                  <CAlert
-            color="danger"
-          >
-            <strong style={{alignItems:'center'}}>Invalid Username and Password!!</strong>
-          </CAlert>
-          :null
-        }
-
-        {
-          emailAlert ? 
-       
-                  <CAlert
-            color="danger"
-          >
-            <strong style={{alignItems:'center'}}>Invalid Email Formate eg.abc@xyz.com !!</strong>
-          </CAlert>
-          :null
-        }
+    
           <TextField
             margin="normal"
             required
@@ -143,7 +123,12 @@ export default function SignIn() {
             name="Email"
             autoComplete="Email"
             autoFocus
-            onFocus={() => setemailAlert(false)}
+            onFocus={() =>
+              {
+              setEmail('')
+              }
+             }
+            
             value={Email} 
             onChange={(event) => setEmail(event.target.value)}
           
@@ -161,10 +146,7 @@ export default function SignIn() {
             autoComplete="current-password"
             onChange={(event) => setpassword(event.target.value)}
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
+       
                   <Loader
             style={{textAlign:'center'}}
               type="Puff" 

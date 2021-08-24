@@ -1,16 +1,42 @@
 import React, { useState } from 'react';
 import './Quiz.css'
-import { Button } from 'antd';
+import {Card } from 'antd';
+import { Button } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from '../../config';
+import {  toast } from 'react-toastify';
+import Countdown from 'react-countdown';
 
 export default function Quiz(props) {
+	
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [showScore, setShowScore] = useState(false);
 	const [score, setScore] = useState(0);
 	const[FineshTest,setFineshTest]= useState(false);
 	const [Result,SetReult]= useState('');
+	const [showTest, setshowTest] = React.useState(false);
+	const [Id, setId] = useState('')
 
+React.useEffect(() => {
+		const queryParams = new URLSearchParams(window.location.search);
+		setId(queryParams.get('licenseId'))
+		
+	}, [])
+
+
+
+	const Completionist = () => <span>Time UP!</span>;
+
+	// Renderer callback with condition
+	const renderer = ({  minutes, seconds, completed }) => {
+		if (completed) {
+		  // Render a completed state
+		  return <Completionist />;
+		} else {
+		  // Render a countdown
+		  return <span><strong>{minutes}:{seconds}</strong></span>;
+		}
+	  };
 
 	const questions = [
 		{
@@ -132,76 +158,104 @@ export default function Quiz(props) {
 	};
 
 	const Submit=(event)=>{
-event.preventDefault();
+		event.preventDefault();
 
 		axios.post(API_URL+'/license/LicenseTest',{
-			UserId:props.Id,
+			UserId:Id,
   			 LicenseTest:"Passed"
 		})
 		.then(()=>{
+			toast.success('Your Test has been submitted successfully Passed');
 			window.location = '/ApplyForLicense';
 		})
 		.catch((err)=>console.log(err))
 	}
 
 	return (
-		<div className='app'>
+
+		<>
+	
+		{
+			showTest?
+			<Card title="License Test" bordered={false} style={{marginLeft:200, width: 900 ,height:600 }}>
+			<h2>
+			<Countdown
+			date={Date.now() + 600000}
+			renderer={renderer}
+			 />
+			</h2>
+			<div className='app'>
 		
-			{showScore ? (
-				<div className='score-section'>
-				
-				
-					{
-						FineshTest?
-						<>
-						You scored {score} out of {questions.length}
-						<br/><br/><br/><br/><br/><br/>
-						{Result >=70?
-						<>
-							<h2 style={{color:'green'}}>Passed</h2>
-							<button onClick={(event) =>Submit(event)} style={{width:200, color:'black',backgroundColor:'gray',borderRadius:5,marginTop:70,marginLeft:-140}}>Submit Test</button>
-						</>
-						:
-						<><h2 style={{color:'red'}} >Fail</h2>
+		{showScore ? (
+			<div className='score-section'>
+			
+			
+				{
+					FineshTest?
+					<>
+					You scored {score} out of {questions.length}
+					<br/><br/><br/><br/><br/><br/>
+					{Result >=70?
+					<>
+						<h2 style={{color:'green'}}>Passed</h2>
+						{	toast.success('Passed')	}
+						<button onClick={(event) =>Submit(event)} style={{width:200, color:'black',backgroundColor:'green',borderRadius:5,marginTop:70,marginLeft:-140}}>Submit Test</button>
+					</>
+					:
+					<><h2 style={{color:'red'}} >Fail</h2>
+							{	toast.error('Fail!!!')		}	
 						
-						</>
-						}
-						</>
-						: 
-						<Button  shape="round" style={{marginTop:70,marginLeft:240}} onClick={()=>setFineshTest(true)} >Finish Test</Button>
+					</>
 					}
+					</>
+					: 
+					<Button  variant="contained" color="secondary" style={{marginTop:70,marginLeft:240}} onClick={()=>setFineshTest(true)} >Finish Test</Button>
+				}
+			</div>
+		) : (
+			<>
+				<div className="site-layout-content">
+				<div className='question-section'>
+					<div className='question-count'>
+						<span>Question {currentQuestion + 1}</span>/{questions.length}
+					</div>
+					<div className='question-text'>{questions[currentQuestion].questionText}</div>
+					{
+						questions[currentQuestion].Img_url?
+						<>
+							<img style={{float: 'right' ,borderRadius:10}} src={questions[currentQuestion].Img_url} width='150' height='100' alt='question img'/>
+						</>
+						
+						:null
+					}
+				 
 				</div>
-			) : (
-				<>
-					<div className="site-layout-content">
-					<div className='question-section'>
-						<div className='question-count'>
-							<span>Question {currentQuestion + 1}</span>/{questions.length}
-						</div>
-						<div className='question-text'>{questions[currentQuestion].questionText}</div>
-						{
-							questions[currentQuestion].Img_url?
-							<>
-								<img style={{float: 'right' ,borderRadius:10}} src={questions[currentQuestion].Img_url} width='150' height='100' alt='question img'/>
-							</>
-							
-							:null
-						}
-                     
-					</div>
-					<div className='answer-section'>
-						{questions[currentQuestion].answerOptions.map((answerOption) => (
-							<>
-							
-							<Button   shape="round" onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>{answerOption.answerText}</Button><br></br><br></br>
-							</>
-						))}
-					</div>
-					</div>
+				<div className='answer-section'>
+					{questions[currentQuestion].answerOptions.map((answerOption) => (
+						<>
+						
+						<Button   shape="round" onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>{answerOption.answerText}</Button><br></br><br></br>
+						</>
+					))}
+				</div>
+				</div>
+			
 				
-					
-				</>
-			)}
-		</div>
+			</>
+		)}
+	</div>
+
+		   </Card>
+			:
+			<>
+		   <Button  variant="contained" color="secondary" style={{width:300,marginLeft:500,marginTop:250 }} 
+		   onClick={()=>setshowTest(true)}
+		   >Start Test</Button>
+			</>
+		 }
+
+
+		
+		</>
 	);
 }

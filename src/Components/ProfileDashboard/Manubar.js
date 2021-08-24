@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { Layout  , Dropdown  } from 'antd';
 import 'antd/dist/antd.css';
 import { Typography } from 'antd';
@@ -14,7 +14,7 @@ const { Header  } = Layout;
 const Manubar = () => {
     const [UserData, setUserData] = useState({});
     const [ImageUrl,setImageUrl]= useState('');
-    React.useEffect(() => {
+    useEffect(() => {
           const userdata=JSON.parse(localStorage.getItem('UserData'));
           console.log(userdata)
             setUserData(userdata)

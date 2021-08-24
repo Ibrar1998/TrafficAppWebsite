@@ -13,11 +13,11 @@ const Cards = () => {
 
     return (
         <>
-            <div className="container" data-aos="fade-up" >
-                 <div className="row">  
-                    <div className="col-md-4" >
+            <div className="container " data-aos="fade-up" >
+                 <div className="row ">  
+                    <div className="col-md-4 " >
                         <div className="card text-center">
-                            <div className="card-head-style pb-5">
+                            <div className="card-head-style">
                                 <h3 className="card-title" style={{fontSize:'20px'}}>INSPECTOR GENERAL OF POLICE</h3>
                             </div>
                             <div className="overflow">
@@ -33,7 +33,7 @@ const Cards = () => {
 
                     <div className="col-md-4 ">
                         <div className="card text-center">
-                            <div className="card-head-style pb-5">
+                            <div className="card-head-style ">
                                 <h3 className="card-title" style={{fontSize:'20px'}}>PSP SSP Traffic Division</h3>
                             </div>
                             <div className="overflow">
@@ -49,7 +49,7 @@ const Cards = () => {
 
                     <div className="col-md-4 ">
                         <div className="card text-center">
-                            <div className="card-head-style pb-5">
+                            <div className="card-head-style ">
                                 <h3 className="card-title" style={{fontSize:'20px'}}>ITP License Branch PSP</h3>
                             </div>
                             <div className="overflow">

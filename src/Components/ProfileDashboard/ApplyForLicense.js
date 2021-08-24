@@ -1,18 +1,15 @@
 import React,{useState} from 'react';
 import { Layout , Breadcrumb  , Card , Modal ,Form, Input  , Row , Col , Radio , Checkbox     } from 'antd';
 import 'antd/dist/antd.css';
-import { Tabs ,Button} from 'antd';
+import { Tabs } from 'antd';
+import { Button } from '@material-ui/core';
 import Sidebarss from './Sidebarss';
-import Quiz from './Quiz';
-import Countdown from 'react-countdown';
 import Manubar from './Manubar';
 import API_URL from '../../config';
 import axios from 'axios';
-import ProfileCard from './ProfileCard';
-import {CBadge,  CButton,} from '@coreui/react'
-import PrintComponents from "react-print-components";
+import {CBadge} from '@coreui/react'
 import { CAlert} from '@coreui/react';
-
+import {  toast } from 'react-toastify';
 
 
 const { TabPane } = Tabs;
@@ -28,43 +25,57 @@ const ApplyForLicense = () => {
     const [Adress, setAdress] = useState('');//
     const [Dob, setDOB] = useState('');//
     const [PhoneNum, setPhoneNum] = useState('');//
-    const [UserID, setUserID] = useState('');
     const [Occupation, setOccupation] = useState('');
     const [LicenseType, setLicenseType] = useState('');
-    const [LicenseApplied, setLicenseApplied] = useState({});
+    const [LicenseApplied, setLicenseApplied] = useState([]);
     const [checkalert, setcheckalert] = useState(false);
     const [alertValue, setalertValue] = useState('');
-   
+
     ///////////////////////////////
   
     const [isModalVisible, setIsModalVisible] = React.useState(false);
-    const [showTest, setshowTest] = React.useState(false);
 
+  
 
 
 
     React.useEffect(() => {
+     
         const userdata=JSON.parse(localStorage.getItem('UserData'));
-        setUserID(userdata._id)
-
         axios.get(API_URL+'/license/'+userdata._id)
         .then(res=>
-            {
+            {  
                 setLicenseApplied(res.data)
                 console.log(res)
             })
            
         .catch(err=>console.log(err))
-        
       
-  }, [UserID]);
+  }, []);
+
   const getBadge = status => {
     switch (status) {
-      case 'Completed': return 'success'
+      case 'Approved': return 'success'
       case 'Pending': return 'danger'
       default: return 'primary'
     }
   }
+
+  function underAgeValidate(birthday){
+	// it will accept two types of format yyyy-mm-dd and yyyy/mm/dd
+	var optimizedBirthday = birthday.replace(/-/g, "/");
+	//set date based on birthday at 01:00:00 hours GMT+0100 (CET)
+	var myBirthday = new Date(optimizedBirthday);
+	// set current day on 01:00:00 hours GMT+0100 (CET)
+	var currentDate = new Date().toJSON().slice(0,10)+' 01:00:00';
+	// calculate age comparing current date and borthday
+	var myAge = ~~((Date.now(currentDate) - myBirthday) / (31557600000));
+	if(myAge < 18) {
+     	    return false;
+        }else{
+	    return true;
+	}
+}
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -77,24 +88,29 @@ const ApplyForLicense = () => {
 
     const handleOk = (event) => {
         event.preventDefault();
+
+        if(!LicenseType){
+            alert('Select License Type!!');
+            return;
+        }
         if(!Name){
             alert('Please Enter Name');
             return;
         }
-        else {if (/[^a-zA-Z]/.test(Name)){
+        else if(!(/^[a-zA-Z\s]*$/).test(Name)){
             setcheckalert(true);
-            setalertValue('Invalid Name formate Alpha only !!')
-            return;
-          }}
+            return setalertValue('Invalid UserName formate Alphabat only !!')
+            
+          }
         if(!FName){
             alert('Please Enter father');
             return;
         }
-        else {if (/[^a-zA-Z]/.test(FName)){
+        else if(!(/^[a-zA-Z\s]*$/).test(FName)){
             setcheckalert(true);
-            setalertValue('Invalid Father-Name formate Alpha only !!')
-            return;
-          }}
+            return setalertValue('Invalid UserName formate Alphabat only !!')
+            
+          }
         if(!Adress){
             alert('Please Enter Addres');
             return;
@@ -102,6 +118,12 @@ const ApplyForLicense = () => {
         if(!Dob){
             alert('Please Enter Date of Birth');
             return;
+        }else{
+          const valid =  underAgeValidate(Dob);
+          if(!valid){
+            toast.error('Your Date of Birth must be 18 +');
+            return;
+          }
         }
         if(!CNIC){
             alert('Please Enter Cnic');
@@ -127,19 +149,16 @@ const ApplyForLicense = () => {
             alert('Please Enter Mobile number');
             return;
         }
-        else {if (/[^a-zA-Z]/.test(PhoneNum)){
+        else {if (!(/^\d{11}$/).test(PhoneNum)){
             setcheckalert(true);
             setalertValue('Invalid PhoneNum formate Numeric only !!')
             return;
           }}
 
-        if(!LicenseType){
-            alert('Please Enter Check License Type');
-            return;
-        }
+          const data=JSON.parse(localStorage.getItem('UserData'));
 
             var userdata={
-                UserId:LicenseApplied.UserId,
+                UserId:data._id,
                 Status:'Pending',
                 Cnic:CNIC,
                 LicenseInfo:{
@@ -161,13 +180,15 @@ const ApplyForLicense = () => {
 
             axios({
                 method: "post",
-                url: "http://192.168.0.111:7777/license/createlicense",
+                url: API_URL+"/license/createlicense",
                 data: userdata,
               })
                 .then(function (response) {
+                    toast.success('Your License Application has been Submitted Successfully');
                   console.log(response);
                 })
                 .catch(function (response) {
+                    toast.error('Somethong Went Wroung!');
                   console.log(response);
                 });
         setIsModalVisible(false);
@@ -187,19 +208,37 @@ const ApplyForLicense = () => {
       };
 
 
-            const Completionist = () => <span>Time UP!</span>;
+           
 
-            // Renderer callback with condition
-            const renderer = ({  minutes, seconds, completed }) => {
-                if (completed) {
-                  // Render a completed state
-                  return <Completionist />;
-                } else {
-                  // Render a countdown
-                  return <span><strong>{minutes}:{seconds}</strong></span>;
-                }
-              };
-                
+             const LicenseTest =(id)=>{   
+                 window.location=`/Quiz?licenseId=${id}`;
+              }
+              const DownloadChallan =(id)=>{   
+                window.location=`/ProfileCard?licenseId=${id}`;
+             }
+
+              const data=  LicenseApplied.map((item,index)=>        
+              <tr key={index}>
+              <td>   {item.LicenseInfo? item.LicenseInfo.Name:null } </td>
+              <td > {item.LicenseInfo? item.LicenseInfo.Dob :null}  </td>
+              <td><div><strong >{formatDate(item.LicenseAppleidDate)}</strong>  </div> </td>
+              <td> {item.LicenseInfo? item.LicenseInfo.LicenseType:null}  </td>
+              <td><CBadge color={getBadge(item.Status)}>  {item.Status} </CBadge></td>
+              {
+                item.Status==='Approved'?
+                <td><Button  color="primary" onClick={()=>LicenseTest(item._id)}> Take Test    </Button></td>
+                :null
+              }
+               {
+                item.LicenseTest==='Passed'?
+                <td><Button  color="primary" onClick={()=>DownloadChallan(item._id)}> License Challan Form    </Button></td>
+                :null
+              }
+              </tr> 
+          ) 
+
+
+
     return (
         <>
             <Layout style={{height:'1000px'}}>
@@ -296,6 +335,7 @@ const ApplyForLicense = () => {
                                                                                         
                                                                                         >
                                                                                             <Input
+                                                                                              onFocus={()=>setcheckalert(false)}
                                                                                             value={Name}
                                                                                             onChange={(e)=>setName(e.target.value)}
                                                                                             style={{marginLeft : '12em'}} />
@@ -309,6 +349,7 @@ const ApplyForLicense = () => {
                                                                                         >
                                                                                         <Input 
                                                                                          value={FName}
+                                                                                         onFocus={()=>setcheckalert(false)}
                                                                                          onChange={(e)=>setFname(e.target.value)}
                                                                                         type='text' style={{marginLeft : '9em'}}
                                                                                          
@@ -349,6 +390,7 @@ const ApplyForLicense = () => {
                                                                                         
                                                                                         >
                                                                                         <Input
+                                                                                         onFocus={()=>setcheckalert(false)}
                                                                                             value={CNIC}
                                                                                             onChange={(e)=>setCNIC(e.target.value)}
                                                                                         type='text' style={{marginLeft : '10.3em'}} 
@@ -391,6 +433,7 @@ const ApplyForLicense = () => {
                                                                                         >
                                                                                         <Input 
                                                                                              value={PhoneNum}
+                                                                                             onFocus={()=>setcheckalert(false)}
                                                                                              onChange={(e)=>setPhoneNum(e.target.value)}
                                                                                         type='text' style={{marginLeft : '13.3em'}} />
                                                                                         </Form.Item>
@@ -422,21 +465,16 @@ const ApplyForLicense = () => {
                                                 <th>Username</th>
                                                 <th>DOB</th>
                                                 <th>Date Applied</th>
-                                                <th>Id</th>
+                                                <th>License Type</th>
                                                 <th>Status</th>
-                                                
+                                                <th>Apply For Test</th>
+                                                <th>Download Form</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <td>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Name:null}</td>
-                                                <td>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Dob:null}</td>
-                                                <td>{LicenseApplied.LicenseInfo? formatDate( LicenseApplied.LicenseAppleidDate):null}</td>
-                                              <td>{LicenseApplied._id}</td>
-                                              <td><CBadge color={getBadge(LicenseApplied.Status)}>
-                                                    {LicenseApplied.Status}
-                                                </CBadge></td>
-                                              
-                                            </tbody>            
+                                         
+                                            {
+                                                data
+                                            }
                                             </table>
                                                       </>
 
@@ -444,59 +482,7 @@ const ApplyForLicense = () => {
                                             <h1 style={{textAlign:'center'}}>No Record Found!</h1>
                                         }
                                     </TabPane>
-                                    <TabPane tab="Quiz" key="3">
-                                        {
-                                            LicenseApplied.Status==='Approved'?
-                                            <>
-                                            {
-                                                   showTest?
-                                                   <Card title="License Test" bordered={false} style={{ width: 800 ,height:600 }}>
-                                                   <h2>
-                                                   <Countdown
-                                                   date={Date.now() + 600000}
-                                                   renderer={renderer}
-                                                    />
-                                                   </h2>
-                                                  <Quiz  Id={LicenseApplied._id} />
-                                                  </Card>
-                                                   :
-                                                   <>
-                                                  <Button type="primary" style={{width:300,marginLeft:400,marginTop:100 }} 
-                                                  onClick={()=>setshowTest(true)}
-                                                  >Start Test</Button>
-                                                   </>
-                                            }
-                                           
-                                            </>
-                                            :<h2>Your License Application Still Pending so you can't give License Test</h2>
-
-
-                                          
-                                        }
-                                       
-                            
-                                    </TabPane>
-                                    <TabPane tab="License Form" key="4">
                                    
-                                       
-                                       
-                                        {
-                                            LicenseApplied.Status==='Approved'?
-                                            <>
-                                            <ProfileCard LicenseApplied={LicenseApplied}  />
-                                            <PrintComponents
-                                            trigger={<CButton   color="success" >Download pdf</CButton>}
-                                            >
-                                          <ProfileCard LicenseApplied={LicenseApplied}  />
-                                            </PrintComponents>
-                                               
-                                               </>
-                                            : <h2>You have't Passed your License test Yet so you can't  continue to Medical and Driving Test</h2>
-                                        }
-                                           
-                                       
-                                    </TabPane>
-                                    
                                 </Tabs>
   
                                

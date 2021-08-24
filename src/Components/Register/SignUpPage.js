@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -16,9 +14,10 @@ import Navbar from '../MenueBar/MenueBar'
 import axios from 'axios';
 import API_URL from '../../config';
 import Loader from "react-loader-spinner";
-import { CAlert} from '@coreui/react';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
+import { toast } from "react-toastify";
+
 
 
 
@@ -51,58 +50,47 @@ export default function SignUp() {
   const [Password, setPassword] = useState('');
   const [ConfirmPassword, setConfirmPassword] = useState('');
   const [spinnerLoading, setSpinnerLoading] = useState(false);
-  const [checkUName, setcheckUName] = useState(false);
-  const [emailCheck, setemailCheck] = useState(false);
-  const [cnicCheck, setcnicCheck] = useState(false);
 
   const SubmitSignuP =(event)=>{
     event.preventDefault();
     if(!Username){
-      alert('Fill in Username');
-      return;
+      return toast.warning('Fill in the Username');
     }
    
     else {if (/[^a-zA-Z]/.test(Username)){
-      setcheckUName(true);
-        return;
+      return toast.error("Invalid UName Alphabets only !!");
       }}
     
     if(!Email){
-      alert('Fill in Email');
-      return;
+      return toast.warning('Fill in the Email');
     }
     else {
-      let reg = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w\w+)+$/;
+      let reg = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w\w+)+$/;
       if(reg.test(Email)===false){
-            setemailCheck(true);
-        return;
+        return toast.error("Invalid Email Formate eg.abc@xyz.com !!");
       }            
     }
 
     if(!Cnic){
-      alert('Fill in Cnic');
-      return;
+      return toast.warning('Fill in the CNIC');
     }
     else{
       let reg = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
       if(reg.test(Cnic)===false){
-        setcnicCheck(true);
-        return;
+        return toast.error("Invalid Cnic Format!! \n e.g xxxxx-xxxxxxx-x");
+        
       }
     }
 
 
     if(!Password){
-      alert('Fill in Password');
-      return;
+      return toast.warning('Fill in the Password');
     }
     if(!ConfirmPassword){
-      alert('Fill in Confirm Password');
-      return;
+      return toast.warning('Fill in the Confirm Password');
     }
     if(Password!==ConfirmPassword){
-      alert('Password did not matched');
-      return;
+      return toast.error('Password did not matched');
     }
 
         var Datatosend={
@@ -161,7 +149,6 @@ export default function SignUp() {
                 onChange={
                 (e)=>setUsername(e.target.value)}
                 onFocus={() => {
-                  setcheckUName(false)
                   setUsername('');
                 }}
                 autoComplete="FullName"
@@ -170,18 +157,7 @@ export default function SignUp() {
 
         
             </Grid>
-            <Grid item xs={12}>
-            {
-          checkUName ? 
-       
-                  <CAlert
-            color="danger"
-          >
-            <strong style={{alignItems:'center'}}>Invalid UName Alphabets only !!</strong>
-          </CAlert>
-          :null
-        }  
-        </Grid>
+            
           
 
 
@@ -197,24 +173,12 @@ export default function SignUp() {
                 value={Email}
                 onChange={(e)=>setEmail(e.target.value)}
                 onFocus={() => {
-                  setemailCheck(false)
                   setEmail('');
                 }}
               />
             </Grid>
 
-            <Grid item xs={12}>
-            {
-          emailCheck ? 
-       
-                  <CAlert
-            color="danger"
-          >
-            <strong style={{alignItems:'center'}}>Invalid Email Formate eg.abc@xyz.com !!</strong>
-          </CAlert>
-          :null
-        }  
-        </Grid>
+            
 
             <Grid item xs={12}>
               <TextField
@@ -230,21 +194,7 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12}>
-            {
-            cnicCheck ? 
-       
-                  <CAlert
-            color="danger"
-          >
-            <strong style={{alignItems:'center'}}>Invalid Cnic Format!! \n e.g xxxxx-xxxxxxx-x</strong>
-          </CAlert>
-          :null
-        }  
-        </Grid>
-
-           
-
+          
             <Grid item xs={12}>
               <TextField
                 required
@@ -273,15 +223,6 @@ export default function SignUp() {
                 onChange={(e)=>setConfirmPassword(e.target.value)}
               />
             </Grid>
-
-
-            {/* <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration updates via email."
-              />
-            </Grid> */}
-
 
           </Grid>
                   <Loader

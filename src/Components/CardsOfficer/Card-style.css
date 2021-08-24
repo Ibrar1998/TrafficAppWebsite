@@ -2,14 +2,18 @@
 
 .card{
     width: 22rem;
-    margin-top: 5rem;
+    margin-top: 10rem;
     margin-bottom: 5rem;
     margin-right: 2rem;
+    transition: 0.5s ease;
 
 }
 
 .card:hover{
-    box-shadow: 5px 10px 20px 1px rgba(0, 0, 0, 0.253) !important;
+    /* box-shadow: 5px 10px 20px 1px rgba(0, 0, 0, 0.253) !important; */
+    transform: scale(1.2);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
 }
 
 .card-head-style h3{

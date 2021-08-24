@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './Components/WebPages/Homes';
-// import Dowanload from './Components/WebPages/Dowanload';
+import { ToastContainer } from 'react-toastify';
 import ContactUs from './Components/WebPages/Contact-Us';
 import Login from './Components/WebPages/Login';
 import AboutITP from './Components/WebPages/About-ITP';
@@ -18,12 +18,16 @@ import ApplyForLearner from './Components/ProfileDashboard/ApplyForLearner';
 import ApplyForLicense from './Components/ProfileDashboard/ApplyForLicense';
 import PayChallan from './Components/ProfileDashboard/PayChallan';
 import DemoTest from './Components/Servicess/DemoTest';
-
-
+import JazzCash from './Components/ProfileDashboard/JazzCash';
+import Paypal from './Components/ProfileDashboard/Paypal';
+import  Stripe  from './Components/ProfileDashboard/Stripe';
+ import Quiz from './Components/ProfileDashboard/Quiz';
+ import ProfileCard from './Components/ProfileDashboard/ProfileCard';
 const App = () => {
      
  return (
   <>
+  <ToastContainer/>
     <Router>
        <Switch>
           <Route path='/' exact component={Home} />
@@ -46,6 +50,12 @@ const App = () => {
                   <Route path ='/ApplyForLearner' component={ApplyForLearner}/>
                   <Route path ='/ApplyForLicense' component={ApplyForLicense}/>
                   <Route path ='/PayChallan' component={PayChallan}/>
+                  <Route path ='/JazzCash' component={JazzCash}/>
+                  <Route path ='/Paypal' component={Paypal}/>
+                  <Route path ='/Stripe' component={Stripe}/>
+                  <Route path ='/Quiz' component={Quiz}/>
+                  <Route path ='/ProfileCard' component={ProfileCard}/>
+                  
             </Switch>
           </Router>
       </>
