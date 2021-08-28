@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Footers from '../Footers/Footers';
 import Navbar from '../MenueBar/MenueBar'
-import axios from 'axios';
+import { Base64 } from 'js-base64';
 import API_URL from '../../config';
 import Loader from "react-loader-spinner";
 import Aos from 'aos';
@@ -57,9 +57,11 @@ export default function SignUp() {
       return toast.warning('Fill in the Username');
     }
    
-    else {if (/[^a-zA-Z]/.test(Username)){
-      return toast.error("Invalid UName Alphabets only !!");
-      }}
+    else if(!(/^[a-zA-Z\s]*$/).test(Username)){
+      
+      toast.error('Invalid UserName formate Alphabat only !!')
+      
+    }
     
     if(!Email){
       return toast.warning('Fill in the Email');
@@ -77,8 +79,8 @@ export default function SignUp() {
     else{
       let reg = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
       if(reg.test(Cnic)===false){
-        return toast.error("Invalid Cnic Format!! \n e.g xxxxx-xxxxxxx-x");
-        
+          toast.warning('Invalid Cnic Format!! \n e.g xxxxx-xxxxxxx-x');
+        return;
       }
     }
 
@@ -97,21 +99,46 @@ export default function SignUp() {
           Username:Username,
           Email:Email,
           Cnic:Cnic,
-          Password:Password,
+          Password:Base64.encode(Password),
           Role:'User'
         }
 
         console.log(Datatosend);
         setSpinnerLoading(true)
-        axios.post(API_URL+'/register',Datatosend)
-        .then(res=>{
-          if(res.status===200){
-            setSpinnerLoading(false);
-            window.location='/Login'
-          }
-        })
-        .catch(err=>console.log(err));
-    
+  
+        
+        
+      const formBody = JSON.stringify(Datatosend)
+          console.log(formBody);
+      
+          fetch( API_URL+'/register', {
+            method: 'POST',
+            body: formBody,
+            headers: {
+              Accept: "application/json",
+              'Content-Type': 'application/json'
+            },
+          })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              console.log(responseJson)
+              setSpinnerLoading(false); 
+              if (responseJson.message === 'OK') {
+                toast.success('Registration Successful. Please Login to proceed');
+                window.location='/Login';
+                return
+              }
+              else{
+                toast.error(responseJson.message);
+                return
+              } 
+              
+              
+            })
+            .catch((error) => {
+              setSpinnerLoading(false);
+              console.error(error);
+            });
 
   }
 

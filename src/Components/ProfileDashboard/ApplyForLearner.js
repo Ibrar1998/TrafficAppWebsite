@@ -86,7 +86,6 @@ const ApplyForLearner = () => {
         
         var userdata = new FormData();  
 
-      
         if(!ImagetoSend){
           alert("Please Upload Your Img");
           return;

@@ -23,7 +23,7 @@ React.useEffect(() => {
                 <Image
                 width={250}
                 height={250}
-                src={`${API_URL}/${UserData.UserImage}`}
+                src={ UserData.UserImage?`${API_URL}/${UserData.UserImage}` :'./userlogo.png' }
               
                 /> 
               
