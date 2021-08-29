@@ -34,7 +34,7 @@ const ApplyForLicense = () => {
     ///////////////////////////////
   
     const [isModalVisible, setIsModalVisible] = React.useState(false);
-
+    const [validLearner, setvalidLearner] = React.useState();
   
 
 
@@ -42,6 +42,13 @@ const ApplyForLicense = () => {
     React.useEffect(() => {
      
         const userdata=JSON.parse(localStorage.getItem('UserData'));
+
+        axios.get(API_URL+'/user/getvalidleaner/'+userdata._id)
+        .then(res=>{
+            console.log(res.data)
+            setvalidLearner(res.data);
+        }).catch(err=>console.log(err));
+
         axios.get(API_URL+'/license/'+userdata._id)
         .then(res=>
             {  
@@ -155,7 +162,9 @@ const ApplyForLicense = () => {
             return;
           }}
 
-          const data=JSON.parse(localStorage.getItem('UserData'));
+          if(validLearner._id){
+
+            const data=JSON.parse(localStorage.getItem('UserData'));
 
             var userdata={
                 UserId:data._id,
@@ -171,10 +180,9 @@ const ApplyForLicense = () => {
                     BloodGropup:BloodGropup,
                     PhoneNum:PhoneNum,
                     LicenseType:LicenseType,
-                    LicenseImage:LicenseApplied.LearnerImage,
-                    Nationality:LicenseApplied.Nationality,
-                    DriverType:LicenseApplied.DriverType,
-                    LeanerID:LicenseApplied._id,
+                    LicenseImage:validLearner.LearnerImage,
+                    VehType:validLearner.VehType,
+                    LeanerID:validLearner._id,
                 }
             }
 
@@ -191,6 +199,16 @@ const ApplyForLicense = () => {
                     toast.error('Somethong Went Wroung!');
                   console.log(response);
                 });
+          }
+          else{
+            toast.error('You dont have Validlearner For License Application!!');
+            return;
+          }
+
+         
+
+
+
         setIsModalVisible(false);
       };
     

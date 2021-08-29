@@ -90,12 +90,12 @@ React.useEffect(() => {
 			],
 		},
 		{
-			questionText: '6.THE SIGN IN THE PICTURE MEANS',
+			questionText: '6.Red Traffic Light signal means ',
             answerOptions: [
-				{ answerText: 'NO PASSING THROUGH LEVEL CROSSING', isCorrect: true },
-				{ answerText: 'CROSSWALK', isCorrect: false },
-				{ answerText: 'LEVEL CROSSING WITHOUT GATE', isCorrect: false },
-				{ answerText: 'LEVEL CROSSING WITH GATE', isCorrect: false },
+				{ answerText: 'You can Go', isCorrect: true },
+				{ answerText: 'Stop', isCorrect: false },
+				{ answerText: 'Slow Down', isCorrect: false },
+				{ answerText: 'Nothin', isCorrect: false },
 			],
 		},
 		{
@@ -142,8 +142,8 @@ React.useEffect(() => {
 				SetReult(temp);
 		}
 
-	const handleAnswerOptionClick = (isCorrect) => {
-
+	const handleAnswerOptionClick = (event,isCorrect) => {
+		event.preventDefault();
 		if (isCorrect) {
 			setScore(score + 1);
 		}
@@ -198,12 +198,12 @@ React.useEffect(() => {
 					{Result >=70?
 					<>
 						<h2 style={{color:'green'}}>Passed</h2>
-						{	toast.success('Passed')	}
-						<button onClick={(event) =>Submit(event)} style={{width:200, color:'black',backgroundColor:'green',borderRadius:5,marginTop:70,marginLeft:-140}}>Submit Test</button>
+
+						<Button variant="contained" color="secondary" onClick={(event) =>Submit(event)} style={{width:200,borderRadius:5,marginTop:70,marginLeft:-140}}>Submit Test</Button>
 					</>
 					:
 					<><h2 style={{color:'red'}} >Fail</h2>
-							{	toast.error('Fail!!!')		}	
+					<Button variant="contained" color="secondary" onClick={() =>window.location='/ApplyForLicense'} style={{width:200,borderRadius:5,marginTop:70,marginLeft:-120}}> Go Back</Button>	
 						
 					</>
 					}
@@ -234,7 +234,7 @@ React.useEffect(() => {
 					{questions[currentQuestion].answerOptions.map((answerOption) => (
 						<>
 						
-						<Button   shape="round" onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>{answerOption.answerText}</Button><br></br><br></br>
+						<Button   shape="round" onClick={(event) => handleAnswerOptionClick(event,answerOption.isCorrect)}>{answerOption.answerText}</Button><br></br><br></br>
 						</>
 					))}
 				</div>

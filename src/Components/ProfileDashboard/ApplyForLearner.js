@@ -59,6 +59,20 @@ const ApplyForLearner = () => {
       }
     }
 
+    const isValidLearner=(leanerdate)=>{
+     
+      var date1= new Date(leanerdate).toLocaleDateString()
+      var date2= new Date().toLocaleDateString()
+  
+        var today =new Date(date2)
+        var learnerdate =new Date(date1)  
+       
+      var Difference_In_Time = today.getTime() - learnerdate.getTime();
+        
+  
+      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+      return Difference_In_Days;
+    }
 
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric" }
@@ -68,22 +82,31 @@ const ApplyForLearner = () => {
     React.useEffect(() => {
         const userdata=JSON.parse(localStorage.getItem('UserData'));
         setUserID(userdata._id)
-
+     
+      
         axios.get(API_URL+'/user/'+userdata._id)
         .then(res=>
             {
                 setLearnerApplied(res.data)
                 console.log(res)
+                // console.log(LearnerApplied[LearnerApplied.length-1].LearnerAppleidDate)
+               
             })
            
         .catch(err=>console.log(err))
-        
+      
       
   }, [UserID]);
    
     const handleOk = (event) => {
         event.preventDefault();
-        
+
+        var num=  isValidLearner(LearnerApplied[LearnerApplied.length-1].LearnerAppleidDate)
+          if(num<60){
+            alert('Your Previous Learner is Still Valid So you cant aplly new one');  
+            return
+          }
+
         var userdata = new FormData();  
 
         if(!ImagetoSend){

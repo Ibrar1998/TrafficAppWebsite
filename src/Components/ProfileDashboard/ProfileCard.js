@@ -44,7 +44,7 @@ function ProfileCard() {
                                                     LicenseApplied.LicenseInfo?
                                                     <img
                                                     src={API_URL+'/'+LicenseApplied.LicenseInfo.LicenseImage}
-                                                     alt="adminlogo"
+                                                     alt="license img"
                                                      style={{width:200}}
                                                      shape="rounded"
                                                  />
@@ -60,8 +60,6 @@ function ProfileCard() {
                                             <h5>Blood Group: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.BloodGropup:null}</span></h5>
                                             <h5>Mobile Number:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.PhoneNum:null}</span> </h5>
                                             <h5>License Type:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.LicenseType:null}</span> </h5>
-                                            <h5>Nationality:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Nationality:null}</span> </h5>
-                                            <h5>Driver Type: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.DriverType:null}</span></h5>
                                             <h5>Applicant ID: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied._id}</span></h5>
                                             <h5>License Applied Date:<span style={{fontSize:14,color:'gray'}}>{formatDate(LicenseApplied.LicenseAppleidDate)}</span> </h5>
                                             </CCol>
@@ -100,8 +98,6 @@ function ProfileCard() {
                                             <h5>Blood Group: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.BloodGropup:null}</span></h5>
                                             <h5>Mobile Number:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.PhoneNum:null}</span> </h5>
                                             <h5>License Type:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.LicenseType:null}</span> </h5>
-                                            <h5>Nationality:<span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.Nationality:null}</span> </h5>
-                                            <h5>Driver Type: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied.LicenseInfo?LicenseApplied.LicenseInfo.DriverType:null}</span></h5>
                                             <h5>Applicant ID: <span style={{fontSize:14,color:'gray'}}>{LicenseApplied._id}</span></h5>
                                             <h5>License Applied Date:<span style={{fontSize:14,color:'gray'}}>{formatDate(LicenseApplied.LicenseAppleidDate)}</span> </h5>
                                             </CCol>
